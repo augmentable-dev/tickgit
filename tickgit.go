@@ -19,8 +19,9 @@ type File struct {
 
 // Goal represents a goal, which houses a collection of tasks
 type Goal struct {
-	Title string  `hcl:"title,label"`
-	Tasks []*Task `hcl:"task,block"`
+	Title       string  `hcl:"title,label"`
+	Description *string `hcl:"description"`
+	Tasks       []*Task `hcl:"task,block"`
 }
 
 // Task represents a task
