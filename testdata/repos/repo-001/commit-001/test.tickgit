@@ -1,0 +1,28 @@
+goal "Goal 1" {
+    task "Step 1" {
+        status = "done"
+        description = "rejigger the what's eehoosit"
+    }
+
+    task "Step 2" {
+        status = "pending"
+    }
+
+    task "Step 3" {
+        status = "pending"
+    }
+}
+
+goal "Goal 2" {
+    task "Step 1" {
+        status = "done"
+    }
+
+    task "Step 2" {
+        status = "done"
+    }
+
+    task "Step 3" {
+        status = "done"
+    }
+}
