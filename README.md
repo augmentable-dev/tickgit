@@ -26,9 +26,9 @@ goal "Build the Rocketship 🚀" {
   --- 1/3 tasks completed (2 remaining)
   --- 33% completed
 
-  ✅ Construct the engines:
-  ⏳ Attach the engines:
-  ⏳ Thoroughly test the engines:
+  ✅ Construct the engines
+  ⏳ Attach the engines
+  ⏳ Thoroughly test the engines
 ```
 
 ### Why is this useful?

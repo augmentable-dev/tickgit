@@ -15,7 +15,7 @@ const DefaultTemplate = `
   --- {{ .Summary.PercentCompleted }}% completed
 
   {{ range .Tasks }}
-  {{- if .Completed }}✅{{ else }}⏳{{ end }} {{ .Title }}:
+  {{- if .Completed }}✅{{ else }}⏳{{ end }} {{ .Title }}
     {{- if not .Description -}}{{ else }}
     > {{ .Description }}
     {{ end }}
