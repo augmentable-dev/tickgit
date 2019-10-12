@@ -30,3 +30,13 @@ goal "Build the Rocketship 🚀" {
   ⏳ Attach the engines:
   ⏳ Thoroughly test the engines:
 ```
+
+### Why is this useful?
+
+To be honest, I'm not sure yet. This project is a POC I'm exploring. Keeping tickets next to the code they're meant to describe could have the following benefits:
+
+- Tickets live with the code, no need for a 3rd party tool or system (anyone with git access to the repository has access to contributing to the tickets)
+- Updating a ticket's status and merging/committing code are the same action, no need to synchronize across multiple tools
+- Source of truth for a project's ticket history is now the git history, which can be queried and analyzed
+- Current status of a `goal` can be reported by simply parsing the repository's `head`
+- Less context switching between the codebase itself and the system describing "what needs to be done"
