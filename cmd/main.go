@@ -16,8 +16,7 @@ func handleError(err error) {
 
 func main() {
 	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
-		URL:   "https://github.com/augmentable-dev/csv-sqlite",
-		Depth: 1,
+		URL: "https://github.com/augmentable-dev/tickgit",
 	})
 	handleError(err)
 
@@ -27,5 +26,6 @@ func main() {
 	commit, err := r.CommitObject(ref.Hash())
 	handleError(err)
 
-	tickgit.WriteStatus(commit, os.Stdout)
+	err = tickgit.WriteStatus(commit, os.Stdout)
+	handleError(err)
 }
