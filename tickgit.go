@@ -10,7 +10,7 @@ import (
 )
 
 // DefaultMatchPatterns are the default path/filepath match pattern strings used to detect tickgit files
-var DefaultMatchPatterns []string = []string{"*.tickgit"}
+var DefaultMatchPatterns = []string{"*.tickgit"}
 
 // File represents a tickgit file
 type File struct {
@@ -106,7 +106,7 @@ func GoalsFromCommit(commit *object.Commit, matchPatternOverrides []string) ([]G
 	if matchPatternOverrides != nil || len(matchPatternOverrides) != 0 {
 		matchPatterns = matchPatternOverrides
 	}
-	goals := make([]Goal, 0)
+	var goals []Goal
 
 	// get the tree of the commit we want to retrieve goals from
 	tree, err := commit.Tree()
