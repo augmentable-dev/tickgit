@@ -1,10 +1,12 @@
+project_name: tickgit
 before:
   hooks:
-    # you may remove this if you don't use vgo
     - go mod tidy
 builds:
-- env:
-  - CGO_ENABLED=0
+-
+  main: ./cmd/main.go
+  env:
+    - CGO_ENABLED=0
 archives:
 - replacements:
     darwin: Darwin
