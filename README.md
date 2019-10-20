@@ -9,6 +9,8 @@ Tickets as config. Manage your repository's tickets and todo items as configurat
 
 
 ```hcl
+# rocketship.tickgit
+
 goal "Build the Rocketship 🚀" {
     description = "Finalize the construction of the Moonblaster 2000"
 
@@ -27,6 +29,7 @@ goal "Build the Rocketship 🚀" {
 ```
 
 ```
+$ tickgit status
 === Build the Rocketship 🚀 ⏳
   --- 1/3 tasks completed (2 remaining)
   --- 33% completed
