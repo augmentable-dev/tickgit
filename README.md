@@ -58,4 +58,4 @@ brew install tickgit
 
 ### Usage
 
-The most up to date usage will be the output of `tickgit --help`. THe most common usage, however, is `tickgit status` which will output a status report of the tickets in the git repository provided as the first argument.
+The most up to date usage will be the output of `tickgit --help`. THe most common usage, however, is `tickgit status` which will print a status report of tickets for a given git repository. By default, it uses the current working directory.
