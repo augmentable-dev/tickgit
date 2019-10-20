@@ -54,3 +54,8 @@ To be honest, I'm not sure yet. This project is a POC I'm exploring. Keeping tic
 brew tap augmentable-dev/tickgit
 brew install tickgit
 ```
+
+
+### Usage
+
+The most up to date usage will be the output of `tickgit --help`. THe most common usage, however, is `tickgit status` which will output a status report of the tickets in the git repository provided as the first argument.
