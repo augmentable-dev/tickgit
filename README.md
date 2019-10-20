@@ -44,3 +44,13 @@ To be honest, I'm not sure yet. This project is a POC I'm exploring. Keeping tic
 - Source of truth for a project's ticket history is now the git history, which can be queried and analyzed
 - Current status of a `goal` can be reported by simply parsing the repository's `head`
 - Less context switching between the codebase itself and the system describing "what needs to be done"
+
+
+### Installation
+
+#### Homebrew
+
+```
+brew tap augmentable-dev/tickgit
+brew install tickgit
+```
