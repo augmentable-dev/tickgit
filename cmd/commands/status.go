@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(statusCmd)
 }
 
 func handleError(err error) {
@@ -19,7 +19,7 @@ func handleError(err error) {
 	}
 }
 
-var versionCmd = &cobra.Command{
+var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Print a status report of the current directory",
 	Long:  ``,
