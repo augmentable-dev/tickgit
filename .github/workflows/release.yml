@@ -24,4 +24,4 @@ jobs:
           version: latest
           args: release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}

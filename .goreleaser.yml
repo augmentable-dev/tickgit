@@ -17,6 +17,7 @@ brews:
     email: tickgit@augmentable.io
   homepage: "https://augmentable.io/"
   description: "Tickets as config"
+
 archives:
 - replacements:
     darwin: Darwin
