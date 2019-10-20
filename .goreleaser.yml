@@ -8,6 +8,7 @@ builds:
   env:
     - CGO_ENABLED=0
 brews:
+-
   github:
     owner: augmentable-dev
     name: homebrew-tickgit
