@@ -7,6 +7,15 @@ builds:
   main: ./cmd/main.go
   env:
     - CGO_ENABLED=0
+brews:
+  github:
+    owner: augmentable-dev
+    name: homebrew-tickgit
+  commit_author:
+    name: augmentable
+    email: tickgit@augmentable.io
+  homepage: "https://augmentable.io/"
+  description: "Tickets as config"
 archives:
 - replacements:
     darwin: Darwin
