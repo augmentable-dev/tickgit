@@ -13,6 +13,8 @@ github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPd
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
 github.com/augmentable-dev/lege v0.0.0-20191022024440-1583f8f6972a h1:CNfPUBMEyYvH1yJ/pGkLIisZ65y+EHStYPN72OIy9dk=
 github.com/augmentable-dev/lege v0.0.0-20191022024440-1583f8f6972a/go.mod h1:DtuvAW6+SE9e44O6eLaMJp8PFiadmk6NfXslCKYCiB0=
+github.com/augmentable-dev/lege v0.0.0-20191023021623-869a91bc405e h1:geKUZgzslZzV3VHxeMCwRhS4Zs/ocu2mTer4+dB3094=
+github.com/augmentable-dev/lege v0.0.0-20191023021623-869a91bc405e/go.mod h1:DtuvAW6+SE9e44O6eLaMJp8PFiadmk6NfXslCKYCiB0=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
 github.com/coreos/go-etcd v2.0.0+incompatible/go.mod h1:Jez6KQU2B/sWsbdaef3ED8NzMklzPG4d5KIOhIy30Tk=
 github.com/coreos/go-semver v0.2.0/go.mod h1:nnelYz7RCh+5ahJtPPxZlU+153eP4D4r3EedlOD2RNk=

@@ -10,11 +10,11 @@ import (
 
 // ParseOptions are options passed to a parser
 type ParseOptions struct {
-	BoundaryOptions []BoundaryOption
+	Boundaries []Boundary
 }
 
-// BoundaryOption are boundaries to use when collecting strings
-type BoundaryOption struct {
+// Boundary are boundaries to use when collecting strings
+type Boundary struct {
 	Starts []string
 	Ends   []string
 }
@@ -39,7 +39,7 @@ func (options *ParseOptions) maxEndLength() (max int) {
 
 func (options *ParseOptions) getAllStarts() []string {
 	starts := make([]string, 0)
-	for _, boundary := range options.BoundaryOptions {
+	for _, boundary := range options.Boundaries {
 		for _, start := range boundary.Starts {
 			starts = append(starts, start)
 		}
@@ -49,7 +49,7 @@ func (options *ParseOptions) getAllStarts() []string {
 
 func (options *ParseOptions) getAllEnds() []string {
 	ends := make([]string, 0)
-	for _, boundary := range options.BoundaryOptions {
+	for _, boundary := range options.Boundaries {
 		for _, end := range boundary.Ends {
 			ends = append(ends, end)
 		}
@@ -57,8 +57,8 @@ func (options *ParseOptions) getAllEnds() []string {
 	return ends
 }
 
-func (options *ParseOptions) getCorrespondingBoundary(start string) *BoundaryOption {
-	for _, boundary := range options.BoundaryOptions {
+func (options *ParseOptions) getCorrespondingBoundary(start string) *Boundary {
+	for _, boundary := range options.Boundaries {
 		for _, s := range boundary.Starts {
 			if s == start {
 				return &boundary
@@ -68,8 +68,8 @@ func (options *ParseOptions) getCorrespondingBoundary(start string) *BoundaryOpt
 	return nil
 }
 
-func (options *ParseOptions) mustGetCorrespondingBoundary(start string) *BoundaryOption {
-	for _, boundary := range options.BoundaryOptions {
+func (options *ParseOptions) mustGetCorrespondingBoundary(start string) *Boundary {
+	for _, boundary := range options.Boundaries {
 		for _, s := range boundary.Starts {
 			if s == start {
 				return &boundary
@@ -81,8 +81,10 @@ func (options *ParseOptions) mustGetCorrespondingBoundary(start string) *Boundar
 
 // Validate checks the parse options and returns an error if they are invalid
 func (options *ParseOptions) Validate() error {
-
-	allBoundaries := options.BoundaryOptions
+	if options.Boundaries == nil {
+		return errors.New("must supply boundary options")
+	}
+	allBoundaries := options.Boundaries
 	allStarts := options.getAllStarts()
 	allEnds := options.getAllEnds()
 
@@ -99,7 +101,7 @@ func (options *ParseOptions) Validate() error {
 	}
 
 	for _, start := range allStarts {
-		if boundary := options.getCorrespondingBoundary(start); boundary == nil {
+		if boundary := options.getCorrespondingBoundary(start); boundary == nil { // TODO reinspect this check, not sure if it makes sense
 			return fmt.Errorf("start boundary %q must have a corresponding end boundary", start)
 		}
 	}
@@ -114,6 +116,9 @@ type Parser struct {
 
 // NewParser creates a *Parser
 func NewParser(options *ParseOptions) (*Parser, error) {
+	if options == nil {
+		return nil, errors.New("must supply options to parser")
+	}
 	err := options.Validate()
 	if err != nil {
 		return nil, err

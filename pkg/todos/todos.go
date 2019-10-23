@@ -43,10 +43,12 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"Go":         CStyleCommentOptions,
 	"Java":       CStyleCommentOptions,
 	"C":          CStyleCommentOptions,
-	"CPlusPlus":  CStyleCommentOptions,
-	"CSharp":     CStyleCommentOptions,
-	"Javascript": CStyleCommentOptions,
+	"C++":        CStyleCommentOptions,
+	"C#":         CStyleCommentOptions,
+	"JavaScript": CStyleCommentOptions,
 	"Python":     HashStyleCommentOptions,
+	"Ruby":       HashStyleCommentOptions,
+	"PHP":        CStyleCommentOptions,
 }
 
 // SearchFile ...
@@ -56,10 +58,9 @@ func SearchFile(filePath string) ([]*lege.Collection, error) {
 		return nil, err
 	}
 	lang := Language(enry.GetLanguage(filepath.Base(filePath), src))
-	if lang != "Go" || enry.IsVendor(filePath) {
+	if enry.IsVendor(filePath) {
 		return nil, nil
 	}
-	// fmt.Println(lang)
 	options := LanguageParseOptions[lang]
 	commentParser, err := lege.NewParser(options)
 	if err != nil {

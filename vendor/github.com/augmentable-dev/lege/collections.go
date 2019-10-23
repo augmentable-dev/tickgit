@@ -8,8 +8,8 @@ type Location struct {
 
 // Collection represents a string that has been "plucked" from a source
 type Collection struct {
+	Boundary
 	runes         []rune
-	Boundary      BoundaryOption
 	StartLocation Location
 	EndLocation   Location
 }

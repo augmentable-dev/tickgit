@@ -1,7 +1,7 @@
 // todo items around tests
 goal "tests" {
     task "use table based tests" {
-        status = "pending"
+        status = "done"
     }
 
     task "test for invalid parse options" {
