@@ -26,18 +26,18 @@ var todosCmd = &cobra.Command{
 			dir, err = filepath.Rel(cwd, args[0])
 			handleError(err)
 		}
+		found := make([]*todos.TODO, 0)
 		err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() {
 				p, err := filepath.Rel(dir, path)
 				handleError(err)
-				_, err = todos.SearchFile(p)
+				t, err := todos.SearchFile(p)
 				handleError(err)
-				// if len(c) > 0 {
-				// 	fmt.Println(c)
-				// }
+				found = append(found, t...)
 			}
 			return nil
 		})
 		handleError(err)
+		todos.WriteTodos(found, os.Stdout)
 	},
 }

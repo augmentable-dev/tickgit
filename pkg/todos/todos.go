@@ -2,7 +2,6 @@ package todos
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -13,12 +12,12 @@ import (
 
 // CStyleCommentOptions ...
 var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
-	BoundaryOptions: []lege.BoundaryOption{
-		lege.BoundaryOption{
+	Boundaries: []lege.Boundary{
+		lege.Boundary{
 			Starts: []string{"//"},
 			Ends:   []string{"\n"},
 		},
-		lege.BoundaryOption{
+		lege.Boundary{
 			Starts: []string{"/*"},
 			Ends:   []string{"*/"},
 		},
@@ -27,8 +26,8 @@ var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 
 // HashStyleCommentOptions ...
 var HashStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
-	BoundaryOptions: []lege.BoundaryOption{
-		lege.BoundaryOption{
+	Boundaries: []lege.Boundary{
+		lege.Boundary{
 			Starts: []string{"#"},
 			Ends:   []string{"\n"},
 		},
@@ -51,8 +50,17 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"PHP":        CStyleCommentOptions,
 }
 
-// SearchFile ...
-func SearchFile(filePath string) ([]*lege.Collection, error) {
+// ToDo represents a ToDo item
+type ToDo struct {
+	FilePath string
+	Line     int
+	Position int
+	String   string
+}
+
+// SearchFile searches a file for comments. It infers the language
+func SearchFile(filePath string) ([]*ToDo, error) {
+	todos := make([]*ToDo, 0)
 	src, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -61,7 +69,10 @@ func SearchFile(filePath string) ([]*lege.Collection, error) {
 	if enry.IsVendor(filePath) {
 		return nil, nil
 	}
-	options := LanguageParseOptions[lang]
+	options, ok := LanguageParseOptions[lang]
+	if !ok {
+		return nil, nil
+	}
 	commentParser, err := lege.NewParser(options)
 	if err != nil {
 		return nil, err
@@ -78,8 +89,15 @@ func SearchFile(filePath string) ([]*lege.Collection, error) {
 		}
 		s = strings.Replace(comment.String(), "TODO", "", 1)
 		s = strings.Trim(s, " ")
-		fmt.Printf("%q\n", s)
+		// fmt.Printf("%q\n", s)
+		todo := &ToDo{
+			FilePath: filePath,
+			Line:     comment.StartLocation.Line,
+			Position: comment.StartLocation.Pos,
+			String:   s,
+		}
+		todos = append(todos, todo)
 	}
 
-	return comments, nil
+	return todos, nil
 }
