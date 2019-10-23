@@ -65,7 +65,7 @@ func SearchFile(filePath string) ([]*lege.Collection, error) {
 	if err != nil {
 		return nil, err
 	}
-	comments, err := commentParser.ParseReader(bytes.NewReader(src))
+	comments, err := commentParser.Parse(bytes.NewReader(src))
 	if err != nil {
 		return nil, err
 	}
