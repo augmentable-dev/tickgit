@@ -6,8 +6,43 @@
 
 ## tickgit 🎟️
 
-Tickets as config. Manage your repository's tickets and todo items as configuration files in your codebase. Use the `tickgit` command to view a snapshot of pending items, summaries of completed items, and historical reports of progress using `git` history.
+`tickgit` is an experiment in code-based project management. It's a tool to help you manage tickets, todo items, and checklists within a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
 
+It's certainly not meant to replace project management tools such as JIRA, Trello, etc. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
+
+### TODOs
+
+`tickgit todos` will scan a codebase and identify any TODO items in the comments. It will output a report like so:
+
+```
+# tickgit todos ~/Desktop/facebook/react
+...
+TODO: does clang define __GNUC__ ?
+  => /Users/.../Desktop/facebook/react/scripts/perf-counters/src/portability.h:34:3
+
+TODO: FIXME! Without this implemented properly, the JIT
+  => /Users/.../Desktop/facebook/react/scripts/perf-counters/src/portability.h:133:3
+
+TODO: it's awkward to create a bundle for this but if we don't, the package
+  => /Users/.../Desktop/facebook/react/scripts/rollup/bundles.js:454:7
+
+TODO: this is too permissive.
+  => /Users/.../Desktop/facebook/react/scripts/rollup/validate/eslintrc.umd.js:20:7
+
+TODO: type it.
+  => /Users/.../Desktop/facebook/react/scripts/shared/inlinedHostConfigs.js:25:27
+
+123 TODOs Found 📝
+```
+
+#### Coming Soon
+
+- [ ] History - get a better sense of how old TODOs are, when they were introduced and by whom
+- [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
+
+### Tickets
+
+Tickets are a way of defining more complex tasks in your codebase as config files. Currently, tickets are HCL files that look like the following:
 
 ```hcl
 # rocketship.tickgit
@@ -40,9 +75,19 @@ $ tickgit status
   ⏳ Thoroughly test the engines
 ```
 
+#### Coming Soon
+
+- [ ] Simpler ticket definitions - in YAML and/or other (less verbose) config languages
+- [ ] More complex tickets - more states, dependencies on other tickets, etc
+
+### Checklists
+
+_Coming soon_. Checklists will be a way of parsing Markdown checklists in your codebase (either in `.md` files, or within your comments).
+
+
 ### Why is this useful?
 
-To be honest, I'm not sure yet. This project is a POC I'm exploring. Keeping tickets next to the code they're meant to describe could have the following benefits:
+To be honest, I'm trying to figure that out. This project is a POC. Keeping tickets next to the code they're meant to describe could have the following benefits:
 
 - Tickets live with the code, no need for a 3rd party tool or system (anyone with git access to the repository has access to contributing to the tickets)
 - Updating a ticket's status and merging/committing code are the same action, no need to synchronize across multiple tools
@@ -50,6 +95,7 @@ To be honest, I'm not sure yet. This project is a POC I'm exploring. Keeping tic
 - Current status of a `goal` can be reported by simply parsing the repository's `head`
 - Less context switching between the codebase itself and the system describing "what needs to be done"
 
+Generally speaking, this is an experiment in ways to do project management, within the codebase of a project. With a `git` history and some clever parsing, quite a bit of metadata about a project can be gleaned from its codebase. Let's see how useful we can make that information.
 
 ### Installation
 
