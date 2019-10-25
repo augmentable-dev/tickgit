@@ -7,6 +7,7 @@ import (
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 	"github.com/augmentable-dev/tickgit/pkg/todos"
 	"github.com/spf13/cobra"
+	"gopkg.in/src-d/go-git.v4"
 )
 
 func init() {
@@ -28,7 +29,16 @@ var todosCmd = &cobra.Command{
 			handleError(err)
 		}
 
-		comments, err := comments.SearchDir(dir)
+		r, err := git.PlainOpen(dir)
+		handleError(err)
+
+		ref, err := r.Head()
+		handleError(err)
+
+		commit, err := r.CommitObject(ref.Hash())
+		handleError(err)
+
+		comments, err := comments.SearchCommit(commit)
 		handleError(err)
 
 		t := todos.NewToDos(comments)

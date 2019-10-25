@@ -2,6 +2,7 @@ package comments
 
 import (
 	"bytes"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/augmentable-dev/lege"
 	"github.com/src-d/enry/v2"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 // CStyleCommentOptions ...
@@ -61,8 +63,8 @@ type Comment struct {
 }
 
 // SearchFile searches a file for comments. It infers the language
-func SearchFile(filePath string) (Comments, error) {
-	src, err := ioutil.ReadFile(filePath)
+func SearchFile(filePath string, reader io.ReadCloser) (Comments, error) {
+	src, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +73,7 @@ func SearchFile(filePath string) (Comments, error) {
 		return nil, nil
 	}
 	options, ok := LanguageParseOptions[lang]
-	if !ok {
+	if !ok { // TODO provide a default parse option?
 		return nil, nil
 	}
 	commentParser, err := lege.NewParser(options)
@@ -116,7 +118,11 @@ func SearchDir(dirPath string) (Comments, error) {
 			if err != nil {
 				return err
 			}
-			t, err := SearchFile(p)
+			f, err := os.Open(p)
+			if err != nil {
+				return err
+			}
+			t, err := SearchFile(p, f)
 			if err != nil {
 				return err
 			}
@@ -129,4 +135,29 @@ func SearchDir(dirPath string) (Comments, error) {
 		return nil, err
 	}
 	return found, nil
+}
+
+// SearchCommit searches all files in the tree of a given commit
+func SearchCommit(commit *object.Commit) (Comments, error) {
+	c := make(Comments, 0)
+	t, err := commit.Tree()
+	if err != nil {
+		return nil, err
+	}
+	fileIter := t.Files()
+	fileIter.ForEach(func(file *object.File) error {
+		if file.Mode.IsFile() {
+			r, err := file.Reader()
+			if err != nil {
+				return err
+			}
+			found, err := SearchFile(file.Name, r)
+			if err != nil {
+				return err
+			}
+			c = append(c, found...)
+		}
+		return nil
+	})
+	return c, nil
 }
