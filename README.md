@@ -8,7 +8,7 @@
 
 `tickgit` is an experiment in code-based project management. It's a tool to help you manage tickets, todo items, and checklists within a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
 
-It's certainly not meant to replace project management tools such as JIRA, Trello, etc. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers. 
+It's certainly not meant to replace project management tools such as JIRA, Trello, etc. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
 
 ### TODOs
 
@@ -37,8 +37,8 @@ TODO: type it.
 
 #### Coming Soon
 
-- [ ] TODO history - get a better send of how old TODOs are, when they were introduced and by whom
-- [ ] TODO context - more visibility into the lines of code _around_ a TODO for greater context
+- [ ] History - get a better sense of how old TODOs are, when they were introduced and by whom
+- [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
 
 ### Tickets
 
@@ -77,12 +77,12 @@ $ tickgit status
 
 #### Coming Soon
 
-- [ ] Simpler ticket definitions - perhaps in YAML or other config languages
-- [ ] Support for more complex tickets - more states, support dependencies on other tickets, etc
+- [ ] Simpler ticket definitions - in YAML and/or other (less verbose) config languages
+- [ ] More complex tickets - more states, dependencies on other tickets, etc
 
 ### Checklists
 
-_Coming soon_. Checklists will be a way of parsing any Markdown checklists in your code base (either in `.md` files, or within your comments).
+_Coming soon_. Checklists will be a way of parsing Markdown checklists in your codebase (either in `.md` files, or within your comments).
 
 
 ### Why is this useful?
@@ -95,7 +95,7 @@ To be honest, I'm trying to figure that out. This project is a POC. Keeping tick
 - Current status of a `goal` can be reported by simply parsing the repository's `head`
 - Less context switching between the codebase itself and the system describing "what needs to be done"
 
-Generally speaking, this is an experiment in ways to do project management, within the codebase of a project itself. With a `git` history and some clever parsing, quite a bit of metadata about a project can be gleaned from its codebase. Let's see how useful we can make that information.
+Generally speaking, this is an experiment in ways to do project management, within the codebase of a project. With a `git` history and some clever parsing, quite a bit of metadata about a project can be gleaned from its codebase. Let's see how useful we can make that information.
 
 ### Installation
 
