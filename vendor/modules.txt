@@ -2,6 +2,8 @@
 github.com/agext/levenshtein
 # github.com/apparentlymart/go-textseg v1.0.0
 github.com/apparentlymart/go-textseg/textseg
+# github.com/augmentable-dev/lege v0.0.0-20191023021623-869a91bc405e
+github.com/augmentable-dev/lege
 # github.com/emirpasic/gods v1.12.0
 github.com/emirpasic/gods/containers
 github.com/emirpasic/gods/lists
@@ -38,11 +40,22 @@ github.com/sergi/go-diff/diffmatchpatch
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
 github.com/spf13/pflag
+# github.com/src-d/enry/v2 v2.1.0
+github.com/src-d/enry/v2
+github.com/src-d/enry/v2/data
+github.com/src-d/enry/v2/data/rule
+github.com/src-d/enry/v2/internal/tokenizer
+github.com/src-d/enry/v2/internal/tokenizer/flex
+github.com/src-d/enry/v2/regex
 # github.com/src-d/gcfg v1.4.0
 github.com/src-d/gcfg
 github.com/src-d/gcfg/scanner
 github.com/src-d/gcfg/token
 github.com/src-d/gcfg/types
+# github.com/src-d/go-oniguruma v1.1.0
+github.com/src-d/go-oniguruma
+# github.com/toqueteos/trie v1.0.0
+github.com/toqueteos/trie
 # github.com/xanzy/ssh-agent v0.2.1
 github.com/xanzy/ssh-agent
 # github.com/zclconf/go-cty v1.1.0
@@ -130,5 +143,7 @@ gopkg.in/src-d/go-git.v4/utils/merkletrie/filesystem
 gopkg.in/src-d/go-git.v4/utils/merkletrie/index
 gopkg.in/src-d/go-git.v4/utils/merkletrie/internal/frame
 gopkg.in/src-d/go-git.v4/utils/merkletrie/noder
+# gopkg.in/toqueteos/substring.v1 v1.0.2
+gopkg.in/toqueteos/substring.v1
 # gopkg.in/warnings.v0 v0.1.2
 gopkg.in/warnings.v0
