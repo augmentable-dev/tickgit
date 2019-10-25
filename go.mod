@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/augmentable-dev/lege v0.0.0-20191023021623-869a91bc405e
 	github.com/hashicorp/hcl/v2 v2.0.0
-	github.com/iafan/cwalk v0.0.0-20190614202238-fa18e8c290ff
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/src-d/enry/v2 v2.1.0
