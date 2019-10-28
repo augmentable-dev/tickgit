@@ -15,8 +15,8 @@ type ParseOptions struct {
 
 // Boundary are boundaries to use when collecting strings
 type Boundary struct {
-	Starts []string
-	Ends   []string
+	Start string
+	End   string
 }
 
 func (options *ParseOptions) maxStartLength() (max int) {
@@ -40,9 +40,7 @@ func (options *ParseOptions) maxEndLength() (max int) {
 func (options *ParseOptions) getAllStarts() []string {
 	starts := make([]string, 0)
 	for _, boundary := range options.Boundaries {
-		for _, start := range boundary.Starts {
-			starts = append(starts, start)
-		}
+		starts = append(starts, boundary.Start)
 	}
 	return starts
 }
@@ -50,33 +48,26 @@ func (options *ParseOptions) getAllStarts() []string {
 func (options *ParseOptions) getAllEnds() []string {
 	ends := make([]string, 0)
 	for _, boundary := range options.Boundaries {
-		for _, end := range boundary.Ends {
-			ends = append(ends, end)
-		}
+		ends = append(ends, boundary.End)
 	}
 	return ends
 }
 
 func (options *ParseOptions) getCorrespondingBoundary(start string) *Boundary {
 	for _, boundary := range options.Boundaries {
-		for _, s := range boundary.Starts {
-			if s == start {
-				return &boundary
-			}
+		if start == boundary.Start {
+			return &boundary
 		}
 	}
 	return nil
 }
 
 func (options *ParseOptions) mustGetCorrespondingBoundary(start string) *Boundary {
-	for _, boundary := range options.Boundaries {
-		for _, s := range boundary.Starts {
-			if s == start {
-				return &boundary
-			}
-		}
+	b := options.getCorrespondingBoundary(start)
+	if b == nil {
+		panic(fmt.Sprintf("boundary not found for start: %s", start))
 	}
-	panic(fmt.Sprintf("boundary not found for start: %s", start))
+	return b
 }
 
 // Validate checks the parse options and returns an error if they are invalid
@@ -98,6 +89,18 @@ func (options *ParseOptions) Validate() error {
 
 	if len(allEnds) == 0 {
 		return errors.New("must supply at least one end string")
+	}
+
+	for _, start := range allStarts {
+		if start == "" {
+			return errors.New("start cannot be an empty string")
+		}
+	}
+
+	for _, end := range allEnds {
+		if end == "" {
+			return errors.New("end cannot be an empty string")
+		}
 	}
 
 	for _, start := range allStarts {
@@ -186,13 +189,13 @@ func (parser *Parser) Parse(reader io.Reader) (Collections, error) {
 		}
 
 		if !collecting { // if we're not collecting, we're looking for a start match
-			for _, startOption := range parser.options.getAllStarts() { // find a match with any of the possible starts
+			for _, boundary := range parser.options.Boundaries {
+				startOption := boundary.Start                                           // find a match with any of the possible starts
 				if match, _ := parser.windowMatchesString(window, startOption); match { // if the window matches a start option
 					collecting = true // go into collecting mode
-					boundary := parser.options.mustGetCorrespondingBoundary(startOption)
 					collections = append(collections, &Collection{
 						runes:    []rune{c},
-						Boundary: *boundary,
+						Boundary: boundary,
 						StartLocation: Location{
 							Line: lineCounter,
 							Pos:  positionCounter,
@@ -203,18 +206,16 @@ func (parser *Parser) Parse(reader io.Reader) (Collections, error) {
 			}
 		} else { // if we're collecting, we're looking for an end match and storing runes along the way
 			currentCollection := collections.getLast()
-			for _, endOption := range currentCollection.Boundary.Ends {
-				if match, _ := parser.windowMatchesString(window, endOption); match { // if the window matches an end option
-					collecting = false // leave collecting mode
-					// if we're stopping collection, since the window trails the current index, we need to reslice the current collection to take off
-					// the runes we just matched
-					runeCount := utf8.RuneCountInString(endOption)
-					currentCollection.trimRightRunes(runeCount)
-					currentCollection.EndLocation = Location{
-						Line: lineCounter,
-						Pos:  positionCounter - runeCount - 1,
-					}
-					break
+			endOption := currentCollection.Boundary.End
+			if match, _ := parser.windowMatchesString(window, endOption); match { // if the window matches an end option
+				collecting = false // leave collecting mode
+				// if we're stopping collection, since the window trails the current index, we need to reslice the current collection to take off
+				// the runes we just matched
+				runeCount := utf8.RuneCountInString(endOption)
+				currentCollection.trimRightRunes(runeCount)
+				currentCollection.EndLocation = Location{
+					Line: lineCounter,
+					Pos:  positionCounter - runeCount - 1,
 				}
 			}
 			if collecting {

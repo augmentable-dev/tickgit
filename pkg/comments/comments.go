@@ -17,12 +17,12 @@ import (
 var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 	Boundaries: []lege.Boundary{
 		lege.Boundary{
-			Starts: []string{"//"},
-			Ends:   []string{"\n"},
+			Start: "//",
+			End:   "\n",
 		},
 		lege.Boundary{
-			Starts: []string{"/*"},
-			Ends:   []string{"*/"},
+			Start: "/*",
+			End:   "*/",
 		},
 	},
 }
@@ -31,8 +31,8 @@ var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 var HashStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 	Boundaries: []lege.Boundary{
 		lege.Boundary{
-			Starts: []string{"#"},
-			Ends:   []string{"\n"},
+			Start: "#",
+			End:   "\n",
 		},
 	},
 }

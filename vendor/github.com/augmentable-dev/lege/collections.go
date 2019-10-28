@@ -17,6 +17,16 @@ type Collection struct {
 // Collections is a list of *Collection
 type Collections []*Collection
 
+// NewCollection allows a caller to construct a collection
+func NewCollection(start, end Location, boundary Boundary, s string) *Collection {
+	return &Collection{
+		StartLocation: start,
+		EndLocation:   end,
+		Boundary:      boundary,
+		runes:         []rune(s),
+	}
+}
+
 func (collections Collections) getLast() *Collection {
 	return collections[len(collections)-1]
 }
