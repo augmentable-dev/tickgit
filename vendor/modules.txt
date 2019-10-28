@@ -2,7 +2,7 @@
 github.com/agext/levenshtein
 # github.com/apparentlymart/go-textseg v1.0.0
 github.com/apparentlymart/go-textseg/textseg
-# github.com/augmentable-dev/lege v0.0.0-20191023021623-869a91bc405e
+# github.com/augmentable-dev/lege v0.0.0-20191028004410-79cb985065a1
 github.com/augmentable-dev/lege
 # github.com/emirpasic/gods v1.12.0
 github.com/emirpasic/gods/containers
