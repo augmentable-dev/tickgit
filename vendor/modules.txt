@@ -1,4 +1,4 @@
-# github.com/agext/levenshtein v1.2.1
+# github.com/agext/levenshtein v1.2.2
 github.com/agext/levenshtein
 # github.com/apparentlymart/go-textseg v1.0.0
 github.com/apparentlymart/go-textseg/textseg
@@ -11,7 +11,7 @@ github.com/emirpasic/gods/lists/arraylist
 github.com/emirpasic/gods/trees
 github.com/emirpasic/gods/trees/binaryheap
 github.com/emirpasic/gods/utils
-# github.com/google/go-cmp v0.3.0
+# github.com/google/go-cmp v0.3.1
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
@@ -32,7 +32,7 @@ github.com/jbenet/go-context/io
 github.com/kevinburke/ssh_config
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
-# github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7
+# github.com/mitchellh/go-wordwrap v1.0.0
 github.com/mitchellh/go-wordwrap
 # github.com/sergi/go-diff v1.0.0
 github.com/sergi/go-diff/diffmatchpatch
@@ -66,7 +66,7 @@ github.com/zclconf/go-cty/cty/function/stdlib
 github.com/zclconf/go-cty/cty/gocty
 github.com/zclconf/go-cty/cty/json
 github.com/zclconf/go-cty/cty/set
-# golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+# golang.org/x/crypto v0.0.0-20191029031824-8986dd9e96cf
 golang.org/x/crypto/cast5
 golang.org/x/crypto/curve25519
 golang.org/x/crypto/ed25519
@@ -83,11 +83,11 @@ golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/agent
 golang.org/x/crypto/ssh/knownhosts
-# golang.org/x/net v0.0.0-20190724013045-ca1201d0de80
+# golang.org/x/net v0.0.0-20191028085509-fe3aa8a45271
 golang.org/x/net/context
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
-# golang.org/x/sys v0.0.0-20191010194322-b09406accb47
+# golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
 golang.org/x/sys/windows
