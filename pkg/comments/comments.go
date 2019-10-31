@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/augmentable-dev/lege"
 	"github.com/src-d/enry/v2"
@@ -139,25 +140,41 @@ func SearchDir(dirPath string) (Comments, error) {
 
 // SearchCommit searches all files in the tree of a given commit
 func SearchCommit(commit *object.Commit) (Comments, error) {
-	c := make(Comments, 0)
+	found := make(Comments, 0)
 	t, err := commit.Tree()
 	if err != nil {
 		return nil, err
 	}
+
+	var wg sync.WaitGroup
+	errs := make(chan error)
+
 	fileIter := t.Files()
 	fileIter.ForEach(func(file *object.File) error {
 		if file.Mode.IsFile() {
-			r, err := file.Reader()
-			if err != nil {
-				return err
-			}
-			found, err := SearchFile(file.Name, r)
-			if err != nil {
-				return err
-			}
-			c = append(c, found...)
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+
+				r, err := file.Reader()
+				if err != nil {
+					errs <- err
+					return
+				}
+				c, err := SearchFile(file.Name, r)
+				if err != nil {
+					errs <- err
+					return
+				}
+
+				for _, comment := range c {
+					found = append(found, comment)
+				}
+			}()
 		}
 		return nil
 	})
-	return c, nil
+
+	wg.Wait()
+	return found, nil
 }
