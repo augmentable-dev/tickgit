@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
-	"strings"
+	"sync"
 
 	"github.com/augmentable-dev/lege"
 	"github.com/src-d/enry/v2"
@@ -95,69 +94,43 @@ func SearchFile(filePath string, reader io.ReadCloser) (Comments, error) {
 	return comments, nil
 }
 
-// SearchDir searches a directory for comments
-func SearchDir(dirPath string) (Comments, error) {
-	found := make(Comments, 0)
-	// TODO let's see what we can do concurrently here to speed up the processing
-	err := filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
-		localPath, err := filepath.Rel(dirPath, path)
-		if err != nil {
-			return err
-		}
-		pathComponents := strings.Split(localPath, string(os.PathSeparator))
-		// let's ignore git directories TODO: figure out a more generic way to set ignores
-		matched, err := filepath.Match(".git", pathComponents[0])
-		if err != nil {
-			return err
-		}
-		if matched {
-			return nil
-		}
-		if !info.IsDir() {
-			p, err := filepath.Abs(path)
-			if err != nil {
-				return err
-			}
-			f, err := os.Open(p)
-			if err != nil {
-				return err
-			}
-			t, err := SearchFile(p, f)
-			if err != nil {
-				return err
-			}
-			c := Comments(t)
-			found = append(found, c...)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return found, nil
-}
-
 // SearchCommit searches all files in the tree of a given commit
 func SearchCommit(commit *object.Commit) (Comments, error) {
-	c := make(Comments, 0)
+	found := make(Comments, 0)
 	t, err := commit.Tree()
 	if err != nil {
 		return nil, err
 	}
+
+	var wg sync.WaitGroup
+	errs := make(chan error)
+
 	fileIter := t.Files()
 	fileIter.ForEach(func(file *object.File) error {
 		if file.Mode.IsFile() {
-			r, err := file.Reader()
-			if err != nil {
-				return err
-			}
-			found, err := SearchFile(file.Name, r)
-			if err != nil {
-				return err
-			}
-			c = append(c, found...)
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+
+				r, err := file.Reader()
+				if err != nil {
+					errs <- err
+					return
+				}
+				c, err := SearchFile(file.Name, r)
+				if err != nil {
+					errs <- err
+					return
+				}
+
+				for _, comment := range c {
+					found = append(found, comment)
+				}
+			}()
 		}
 		return nil
 	})
-	return c, nil
+
+	wg.Wait()
+	return found, nil
 }
