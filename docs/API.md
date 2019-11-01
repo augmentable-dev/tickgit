@@ -17,7 +17,7 @@ Will return a simple JSON response:
 
 Indicating the total count of TODOs found in the `HEAD` of that repository.
 
-To supply a branch name, send a `branch` query param with your request.
+To indicate a branch, send a `branch` query param supplying the branch name.
 
 _more coming soon!_
 
