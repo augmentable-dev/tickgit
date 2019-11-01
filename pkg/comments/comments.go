@@ -43,15 +43,21 @@ type Language string
 
 // LanguageParseOptions keeps track of source languages and their corresponding comment options
 var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.ParseOptions{
-	"Go":         CStyleCommentOptions,
-	"Java":       CStyleCommentOptions,
-	"C":          CStyleCommentOptions,
-	"C++":        CStyleCommentOptions,
-	"C#":         CStyleCommentOptions,
-	"JavaScript": CStyleCommentOptions,
-	"Python":     HashStyleCommentOptions,
-	"Ruby":       HashStyleCommentOptions,
-	"PHP":        CStyleCommentOptions,
+	"Go":           CStyleCommentOptions,
+	"Java":         CStyleCommentOptions,
+	"C":            CStyleCommentOptions,
+	"C++":          CStyleCommentOptions,
+	"C#":           CStyleCommentOptions,
+	"JavaScript":   CStyleCommentOptions,
+	"Python":       HashStyleCommentOptions,
+	"Ruby":         HashStyleCommentOptions,
+	"PHP":          CStyleCommentOptions,
+	"Shell":        HashStyleCommentOptions,
+	"Visual Basic": &lege.ParseOptions{Boundaries: []lege.Boundary{lege.Boundary{Start: "'", End: "\n"}}},
+	"TypeScript":   CStyleCommentOptions,
+	"Objective-C":  CStyleCommentOptions,
+	"Groovy":       CStyleCommentOptions,
+	"Swift":        CStyleCommentOptions,
 }
 
 // Comments is a list of comments
