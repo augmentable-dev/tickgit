@@ -17,6 +17,8 @@ Will return a simple JSON response:
 
 Indicating the total count of TODOs found in the `HEAD` of that repository.
 
+To supply a branch name, send a `branch` query param with your request.
+
 _more coming soon!_
 
 ### TODOs Badge
@@ -26,5 +28,7 @@ Similarly, `GET` requests to `https://tickgit.augmentable.dev/todos-badge` with 
 ```
 http://tickgit.augmentable.dev/todos-badge?repo=https://github.com/facebook/react
 ```
+
+The `branch` query param will also work as above.
 
 Will return JSON that can be fed into a shields.io badge: [https://shields.io/endpoint](https://shields.io/endpoint)
