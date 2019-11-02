@@ -27,7 +27,7 @@ func NewToDo(comment comments.Comment) *ToDo {
 	if !strings.Contains(s, "TODO") {
 		return nil
 	}
-	re := regexp.MustCompile(`TODO:?`)
+	re := regexp.MustCompile(`TODO(:|,)?`)
 	s = re.ReplaceAllLiteralString(comment.String(), "")
 	s = strings.Trim(s, " ")
 
