@@ -8,7 +8,7 @@ import (
 // DefaultTemplate is the default report template
 const DefaultTemplate = `
 {{- range $index, $todo := . }}
-{{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}{{ .String }}
+{{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}: {{ .String }}
   => {{ with .Comment }}{{ .FilePath }}:{{ .StartLocation.Line }}:{{ .StartLocation.Pos }}{{ end }}
 {{ else }}
 no todos 🎉
