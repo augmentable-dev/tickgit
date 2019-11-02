@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/augmentable-dev/tickgit/pkg/comments"
@@ -26,7 +27,8 @@ func NewToDo(comment comments.Comment) *ToDo {
 	if !strings.Contains(s, "TODO") {
 		return nil
 	}
-	s = strings.Replace(comment.String(), "TODO", "", 1)
+	re := regexp.MustCompile(`TODO:?`)
+	s = re.ReplaceAllLiteralString(comment.String(), "")
 	s = strings.Trim(s, " ")
 
 	todo := ToDo{Comment: comment, String: s}
