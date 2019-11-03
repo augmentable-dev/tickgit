@@ -13,6 +13,14 @@ var rootCmd = &cobra.Command{
 	Long:  `tickgit is a tool for helping you manage tickets and todos in your codebase, as a part of your git history`,
 }
 
+// TODO clean this up
+func handleError(err error) {
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {

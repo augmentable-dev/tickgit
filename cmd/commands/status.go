@@ -13,13 +13,6 @@ func init() {
 	rootCmd.AddCommand(statusCmd)
 }
 
-// TODO clean this up
-func handleError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Print a status report of the current directory",
@@ -34,6 +27,8 @@ var statusCmd = &cobra.Command{
 			dir, err = filepath.Rel(cwd, args[0])
 			handleError(err)
 		}
+
+		validateDir(dir)
 
 		r, err := git.PlainOpen(dir)
 		handleError(err)
