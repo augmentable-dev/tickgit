@@ -17,7 +17,7 @@ func init() {
 var todosCmd = &cobra.Command{
 	Use:   "todos",
 	Short: "Print a report of current TODOs",
-	Long:  ``,
+	Long:  `Scans a given git repository looking for any code comments with TODOs. Displays a report of all the TODO items found.`,
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cwd, err := os.Getwd()
@@ -28,6 +28,8 @@ var todosCmd = &cobra.Command{
 			dir, err = filepath.Rel(cwd, args[0])
 			handleError(err)
 		}
+
+		validateDir(dir)
 
 		r, err := git.PlainOpen(dir)
 		handleError(err)
