@@ -55,11 +55,12 @@ var todosCmd = &cobra.Command{
 		// handleError(err)
 
 		t := todos.NewToDos(comments)
-		for i, todo := range t {
+		for i, todo := range t { // TODO: can we do this concurrently
 			todo.FindBlame(commit)
 			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", i, len(t), filepath.Base(todo.FilePath), todo.String)
 			// time.Sleep(100 * time.Millisecond)
 		}
+
 		s.Stop()
 		todos.WriteTodos(t, os.Stdout)
 	},
