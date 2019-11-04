@@ -88,7 +88,7 @@ _Coming soon_. Checklists will be a way of parsing Markdown checklists in your c
 
 ### Why is this useful?
 
-To be honest, I'm trying to figure that out. This project is a POC. Keeping tickets next to the code they're meant to describe could have the following benefits:
+This project is a proof-of-concept. Keeping tickets next to the code they're meant to describe could have the following benefits:
 
 - Tickets live with the code, no need for a 3rd party tool or system (anyone with git access to the repository has access to contributing to the tickets)
 - Updating a ticket's status and merging/committing code are the same action, no need to synchronize across multiple tools
