@@ -9,7 +9,8 @@ import (
 const DefaultTemplate = `
 {{- range $index, $todo := . }}
 {{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}: {{ .String }}
-  => {{ with .Comment }}{{ .FilePath }}:{{ .StartLocation.Line }}:{{ .StartLocation.Pos }}{{ end }}
+  => {{ .Comment.FilePath }}:{{ .Comment.StartLocation.Line }}:{{ .Comment.StartLocation.Pos }}
+  => added {{ .TimeAgo }} by {{ .Author }}
 {{ else }}
 no todos 🎉
 {{- end }}

@@ -5,6 +5,8 @@ go 1.13
 require (
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/augmentable-dev/lege v0.0.0-20191028004410-79cb985065a1
+	github.com/briandowns/spinner v1.7.0
+	github.com/dustin/go-humanize v1.0.0
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/hashicorp/hcl/v2 v2.0.0
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
