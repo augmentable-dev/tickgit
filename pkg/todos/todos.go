@@ -9,6 +9,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
+	"gopkg.in/src-d/go-git.v4/plumbing/storer"
 )
 
 // ToDo represents a ToDo item
@@ -55,15 +56,40 @@ func (t *ToDo) TimeAgo() string {
 }
 
 // FindBlame sets the Added and Author fields on the ToDo
-func (t *ToDo) FindBlame(commit *object.Commit) error {
-	blame, err := git.Blame(commit, t.FilePath)
+// TODO: find ways to optimize this, set a ceiling to stop searching the history after some time
+// run this against a batch of todos so that git history is not traversed per-todo
+func (t *ToDo) FindBlame(repo *git.Repository, from *object.Commit) error {
+	commitIter, err := repo.Log(&git.LogOptions{
+		From: from.Hash,
+	})
 	if err != nil {
 		return err
 	}
-	line := blame.Lines[t.StartLocation.Line]
-	added := line.Date
-	t.Added = &added
-	t.Author = line.Author
+	defer commitIter.Close()
+
+	prevCommit := from
+	err = commitIter.ForEach(func(commit *object.Commit) error {
+		prevCommit = commit
+		f, err := commit.File(t.FilePath)
+		if err != nil {
+			return err
+		}
+		c, err := f.Contents()
+		if err != nil {
+			return err
+		}
+		todoPresent := strings.Contains(c, t.String)
+
+		if !todoPresent {
+			return storer.ErrStop
+		}
+		return nil
+	})
+	t.Author = prevCommit.Author.String()
+	t.Added = &(prevCommit.Author.When)
+	if err != nil {
+		return nil
+	}
 	return nil
 }
 
