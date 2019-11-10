@@ -3,6 +3,7 @@ package todos
 import (
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 	"github.com/dustin/go-humanize"
@@ -67,11 +68,12 @@ func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return strings.Contains(c, t.Comment.String()), nil
+	contains := strings.Contains(c, t.Comment.String())
+	return contains, nil
 }
 
 // FindBlame sets the blame information on each todo in a set of todos
-func (t *ToDos) FindBlame(repo *git.Repository, from *object.Commit) error {
+func (t *ToDos) FindBlame(repo *git.Repository, from *object.Commit, cb func(*object.Commit, int)) error {
 	commitIter, err := repo.Log(&git.LogOptions{
 		From: from.Hash,
 	})
@@ -86,18 +88,32 @@ func (t *ToDos) FindBlame(repo *git.Repository, from *object.Commit) error {
 		if len(remainingTodos) == 0 {
 			return storer.ErrStop
 		}
-		newRemainingTodos := make(ToDos, 0)
-		for _, todo := range remainingTodos {
-			exists, err := todo.existsInCommit(commit)
-			if err != nil {
-				return err
-			}
-			if !exists { // if the todo doesn't exist in this commit, it was added in the previous commit (previous wrt the iterator, more recent in time)
-				todo.Commit = prevCommit
-			} else { // if the todo does exist in this commit, add it to the new list of remaining todos
-				newRemainingTodos = append(newRemainingTodos, todo)
-			}
+		if commit.NumParents() > 1 {
+			return nil
 		}
+		newRemainingTodos := make(ToDos, 0)
+		errs := make(chan error)
+		var wg sync.WaitGroup
+		var mux sync.Mutex
+		for _, todo := range remainingTodos {
+			wg.Add(1)
+			go func(todo *ToDo, commit *object.Commit, errs chan error) {
+				defer wg.Done()
+				mux.Lock()
+				exists, err := todo.existsInCommit(commit)
+				if err != nil {
+					errs <- err
+				}
+				mux.Unlock()
+				if !exists { // if the todo doesn't exist in this commit, it was added in the previous commit (previous wrt the iterator, more recent in time)
+					todo.Commit = prevCommit
+				} else { // if the todo does exist in this commit, add it to the new list of remaining todos
+					newRemainingTodos = append(newRemainingTodos, todo)
+				}
+			}(todo, commit, errs)
+		}
+		wg.Wait()
+		cb(commit, len(newRemainingTodos))
 		prevCommit = commit
 		remainingTodos = newRemainingTodos
 		return nil

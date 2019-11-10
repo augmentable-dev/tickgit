@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 	"gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 func init() {
@@ -54,14 +56,12 @@ var todosCmd = &cobra.Command{
 		// handleError(err)
 
 		t := todos.NewToDos(comments)
-		err = t.FindBlame(r, commit)
-		handleError(err)
 
-		// for i, todo := range t { // TODO: can we do this concurrently
-		// 	todo.FindBlame(r, commit)
-		// 	s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", i, len(t), filepath.Base(todo.FilePath), todo.String)
-		// 	// time.Sleep(100 * time.Millisecond)
-		// }
+		err = t.FindBlame(r, commit, func(commit *object.Commit, remaining int) {
+			total := len(t)
+			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
+		})
+		handleError(err)
 
 		s.Stop()
 		todos.WriteTodos(t, os.Stdout)
