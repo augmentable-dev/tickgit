@@ -3,7 +3,6 @@ package todos
 import (
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 	"github.com/dustin/go-humanize"
@@ -16,81 +15,18 @@ import (
 type ToDo struct {
 	comments.Comment
 	String string
-	Added  *time.Time
-	Author string
+	Commit *object.Commit
 }
 
 // ToDos represents a list of ToDo items
 type ToDos []*ToDo
 
-// Count returns the number of todos
-func (t ToDos) Count() int {
-	return len(t)
-}
-
 // TimeAgo returns a human readable string indicating the time since the todo was added
 func (t *ToDo) TimeAgo() string {
-	if t.Added == nil {
+	if t.Commit == nil {
 		return "<unknown>"
 	}
-	return humanize.Time(*t.Added)
-	// dur := time.Now().Sub(*t.Added)
-
-	// hours := dur.Hours()
-	// days := hours / 24
-	// weeks := days / 7
-	// months := days / 30
-	// years := months / 12
-
-	// if hours <= 24 {
-	// 	return fmt.Sprintf("~%d hours ago", int(math.Round(hours)))
-	// } else if days <= 7 {
-	// 	return fmt.Sprintf("~%d days ago", int(math.Round(days)))
-	// } else if weeks <= 4 {
-	// 	return fmt.Sprintf("~%d weeks ago", int(math.Round(weeks)))
-	// } else if months <= 12 {
-	// 	return fmt.Sprintf("~%d months ago", int(math.Round(months)))
-	// } else {
-	// 	return fmt.Sprintf("~%d years ago", int(math.Round(years)))
-	// }
-}
-
-// FindBlame sets the Added and Author fields on the ToDo
-// TODO: find ways to optimize this, set a ceiling to stop searching the history after some time
-// run this against a batch of todos so that git history is not traversed per-todo
-func (t *ToDo) FindBlame(repo *git.Repository, from *object.Commit) error {
-	commitIter, err := repo.Log(&git.LogOptions{
-		From: from.Hash,
-	})
-	if err != nil {
-		return err
-	}
-	defer commitIter.Close()
-
-	prevCommit := from
-	err = commitIter.ForEach(func(commit *object.Commit) error {
-		prevCommit = commit
-		f, err := commit.File(t.FilePath)
-		if err != nil {
-			return err
-		}
-		c, err := f.Contents()
-		if err != nil {
-			return err
-		}
-		todoPresent := strings.Contains(c, t.String)
-
-		if !todoPresent {
-			return storer.ErrStop
-		}
-		return nil
-	})
-	t.Author = prevCommit.Author.String()
-	t.Added = &(prevCommit.Author.When)
-	if err != nil {
-		return nil
-	}
-	return nil
+	return humanize.Time(t.Commit.Author.When)
 }
 
 // NewToDo produces a pointer to a ToDo from a comment
@@ -117,4 +53,57 @@ func NewToDos(comments comments.Comments) ToDos {
 		}
 	}
 	return todos
+}
+
+func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
+	f, err := commit.File(t.FilePath)
+	if err != nil {
+		if err == object.ErrFileNotFound {
+			return false, nil
+		}
+		return false, err
+	}
+	c, err := f.Contents()
+	if err != nil {
+		return false, err
+	}
+	return strings.Contains(c, t.Comment.String()), nil
+}
+
+// FindBlame sets the blame information on each todo in a set of todos
+func (t *ToDos) FindBlame(repo *git.Repository, from *object.Commit) error {
+	commitIter, err := repo.Log(&git.LogOptions{
+		From: from.Hash,
+	})
+	if err != nil {
+		return err
+	}
+	defer commitIter.Close()
+
+	remainingTodos := *t
+	prevCommit := from
+	err = commitIter.ForEach(func(commit *object.Commit) error {
+		if len(remainingTodos) == 0 {
+			return storer.ErrStop
+		}
+		newRemainingTodos := make(ToDos, 0)
+		for _, todo := range remainingTodos {
+			exists, err := todo.existsInCommit(commit)
+			if err != nil {
+				return err
+			}
+			if !exists { // if the todo doesn't exist in this commit, it was added in the previous commit (previous wrt the iterator, more recent in time)
+				todo.Commit = prevCommit
+			} else { // if the todo does exist in this commit, add it to the new list of remaining todos
+				newRemainingTodos = append(newRemainingTodos, todo)
+			}
+		}
+		prevCommit = commit
+		remainingTodos = newRemainingTodos
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }

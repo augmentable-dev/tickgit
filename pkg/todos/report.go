@@ -10,11 +10,11 @@ const DefaultTemplate = `
 {{- range $index, $todo := . }}
 {{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}: {{ .String }}
   => {{ .Comment.FilePath }}:{{ .Comment.StartLocation.Line }}:{{ .Comment.StartLocation.Pos }}
-  => added {{ .TimeAgo }} by {{ .Author }}
+  => added {{ .TimeAgo }} by {{ .Commit.Author }} in {{ .Commit.Hash }}
 {{ else }}
 no todos 🎉
 {{- end }}
-{{ .Count }} TODOs Found 📝
+{{ len . }} TODOs Found 📝
 `
 
 // WriteTodos renders a report of todos
