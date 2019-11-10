@@ -113,7 +113,9 @@ func (t *ToDos) FindBlame(repo *git.Repository, from *object.Commit, cb func(*ob
 			}(todo, commit, errs)
 		}
 		wg.Wait()
-		cb(commit, len(newRemainingTodos))
+		if cb != nil {
+			cb(commit, len(newRemainingTodos))
+		}
 		prevCommit = commit
 		remainingTodos = newRemainingTodos
 		return nil
