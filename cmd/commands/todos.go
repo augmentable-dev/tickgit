@@ -63,7 +63,7 @@ var todosCmd = &cobra.Command{
 		// timeout after 30 seconds
 		ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 		defer cancel()
-		_, err = t.FindBlame(ctx, r, commit, func(commit *object.Commit, remaining int) {
+		err = t.FindBlame(ctx, r, commit, func(commit *object.Commit, remaining int) {
 			total := len(t)
 			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
 		})
