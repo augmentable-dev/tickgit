@@ -1,9 +1,11 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/augmentable-dev/tickgit/pkg/comments"
@@ -57,10 +59,17 @@ var todosCmd = &cobra.Command{
 
 		t := todos.NewToDos(comments)
 
-		err = t.FindBlame(r, commit, func(commit *object.Commit, remaining int) {
+		ctx := context.Background()
+		// timeout after 30 seconds
+		ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		_, err = t.FindBlame(ctx, r, commit, func(commit *object.Commit, remaining int) {
 			total := len(t)
 			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
 		})
+
+		sort.Sort(&t)
+
 		handleError(err)
 
 		s.Stop()
