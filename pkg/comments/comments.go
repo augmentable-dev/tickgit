@@ -61,7 +61,7 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 }
 
 // Comments is a list of comments
-type Comments []Comment
+type Comments []*Comment
 
 // Comment represents a comment in a source code file
 type Comment struct {
@@ -96,7 +96,7 @@ func SearchFile(filePath string, reader io.ReadCloser) (Comments, error) {
 	comments := make(Comments, 0)
 	for _, c := range collections {
 		comment := Comment{*c, filePath}
-		comments = append(comments, comment)
+		comments = append(comments, &comment)
 	}
 
 	return comments, nil

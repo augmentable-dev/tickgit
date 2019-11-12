@@ -4,6 +4,10 @@ github.com/agext/levenshtein
 github.com/apparentlymart/go-textseg/textseg
 # github.com/augmentable-dev/lege v0.0.0-20191028004410-79cb985065a1
 github.com/augmentable-dev/lege
+# github.com/briandowns/spinner v1.7.0
+github.com/briandowns/spinner
+# github.com/dustin/go-humanize v1.0.0
+github.com/dustin/go-humanize
 # github.com/emirpasic/gods v1.12.0
 github.com/emirpasic/gods/containers
 github.com/emirpasic/gods/lists
@@ -11,6 +15,8 @@ github.com/emirpasic/gods/lists/arraylist
 github.com/emirpasic/gods/trees
 github.com/emirpasic/gods/trees/binaryheap
 github.com/emirpasic/gods/utils
+# github.com/fatih/color v1.7.0
+github.com/fatih/color
 # github.com/google/go-cmp v0.3.1
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
@@ -30,6 +36,10 @@ github.com/inconshreveable/mousetrap
 github.com/jbenet/go-context/io
 # github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd
 github.com/kevinburke/ssh_config
+# github.com/mattn/go-colorable v0.1.2
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.8
+github.com/mattn/go-isatty
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
 # github.com/mitchellh/go-wordwrap v1.0.0

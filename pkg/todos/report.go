@@ -9,11 +9,14 @@ import (
 const DefaultTemplate = `
 {{- range $index, $todo := . }}
 {{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}: {{ .String }}
-  => {{ with .Comment }}{{ .FilePath }}:{{ .StartLocation.Line }}:{{ .StartLocation.Pos }}{{ end }}
+  => {{ .Comment.FilePath }}:{{ .Comment.StartLocation.Line }}:{{ .Comment.StartLocation.Pos }}
+  {{- if .Commit }}
+  => added {{ .TimeAgo }} by {{ .Commit.Author }} in {{ .Commit.Hash }}
+  {{- end }}
 {{ else }}
 no todos 🎉
 {{- end }}
-{{ .Count }} TODOs Found 📝
+{{ len . }} TODOs Found 📝
 `
 
 // WriteTodos renders a report of todos
