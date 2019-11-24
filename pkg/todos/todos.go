@@ -163,6 +163,7 @@ func (t *ToDos) FindBlame(ctx context.Context, repo *git.Repository, from *objec
 			errs := make(chan error)
 			var wg sync.WaitGroup
 			var mux sync.Mutex
+			// TODO, if the todo item was added in the initial commit, we don't handle that correct
 			for _, todo := range remainingTodos {
 				wg.Add(1)
 				go func(todo *ToDo, commit *object.Commit, errs chan error) {
