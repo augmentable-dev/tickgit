@@ -131,7 +131,7 @@ func SearchDir(dirPath string) (Comments, error) {
 					return err
 				}
 				defer f.Close()
-				t, err := SearchFile(p, f)
+				t, err := SearchFile(localPath, f)
 				if err != nil {
 					return err
 				}
