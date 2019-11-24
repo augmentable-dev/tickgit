@@ -51,11 +51,8 @@ var todosCmd = &cobra.Command{
 		commit, err := r.CommitObject(ref.Hash())
 		handleError(err)
 
-		comments, err := comments.SearchCommit(commit)
+		comments, err := comments.SearchDir(dir)
 		handleError(err)
-
-		// comments, err := comments.SearchDir(dir)
-		// handleError(err)
 
 		t := todos.NewToDos(comments)
 
@@ -67,7 +64,6 @@ var todosCmd = &cobra.Command{
 			total := len(t)
 			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
 		})
-
 		sort.Sort(&t)
 
 		handleError(err)
