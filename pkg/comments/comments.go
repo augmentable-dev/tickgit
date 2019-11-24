@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/augmentable-dev/lege"
+	"github.com/karrick/godirwalk"
 	"github.com/src-d/enry/v2"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
@@ -105,39 +106,41 @@ func SearchFile(filePath string, reader io.Reader) (Comments, error) {
 // SearchDir searches a directory for comments
 func SearchDir(dirPath string) (Comments, error) {
 	found := make(Comments, 0)
-	// TODO let's see what we can do concurrently here to speed up the processing
-	err := filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
-		localPath, err := filepath.Rel(dirPath, path)
-		if err != nil {
-			return err
-		}
-		pathComponents := strings.Split(localPath, string(os.PathSeparator))
-		// let's ignore git directories TODO: figure out a more generic way to set ignores
-		matched, err := filepath.Match(".git", pathComponents[0])
-		if err != nil {
-			return err
-		}
-		if matched {
+	err := godirwalk.Walk(dirPath, &godirwalk.Options{
+		Callback: func(path string, de *godirwalk.Dirent) error {
+			localPath, err := filepath.Rel(dirPath, path)
+			if err != nil {
+				return err
+			}
+			pathComponents := strings.Split(localPath, string(os.PathSeparator))
+			// let's ignore git directories TODO: figure out a more generic way to set ignores
+			matched, err := filepath.Match(".git", pathComponents[0])
+			if err != nil {
+				return err
+			}
+			if matched {
+				return nil
+			}
+			if de.IsRegular() {
+				p, err := filepath.Abs(path)
+				if err != nil {
+					return err
+				}
+				f, err := os.Open(p)
+				if err != nil {
+					return err
+				}
+				defer f.Close()
+				t, err := SearchFile(p, f)
+				if err != nil {
+					return err
+				}
+				c := Comments(t)
+				found = append(found, c...)
+			}
 			return nil
-		}
-		if info.Mode().IsRegular() {
-			p, err := filepath.Abs(path)
-			if err != nil {
-				return err
-			}
-			f, err := os.Open(p)
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-			t, err := SearchFile(p, f)
-			if err != nil {
-				return err
-			}
-			c := Comments(t)
-			found = append(found, c...)
-		}
-		return nil
+		},
+		Unsorted: true,
 	})
 	if err != nil {
 		return nil, err

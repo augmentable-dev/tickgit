@@ -9,6 +9,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/hashicorp/hcl/v2 v2.0.0
+	github.com/karrick/godirwalk v1.13.0
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
