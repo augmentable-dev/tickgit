@@ -70,7 +70,7 @@ type Comment struct {
 }
 
 // SearchFile searches a file for comments. It infers the language
-func SearchFile(filePath string, reader io.ReadCloser) (Comments, error) {
+func SearchFile(filePath string, reader io.Reader) (Comments, error) {
 	src, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -120,7 +120,7 @@ func SearchDir(dirPath string) (Comments, error) {
 		if matched {
 			return nil
 		}
-		if !info.IsDir() {
+		if info.Mode().IsRegular() {
 			p, err := filepath.Abs(path)
 			if err != nil {
 				return err
@@ -129,6 +129,7 @@ func SearchDir(dirPath string) (Comments, error) {
 			if err != nil {
 				return err
 			}
+			defer f.Close()
 			t, err := SearchFile(p, f)
 			if err != nil {
 				return err

@@ -2,6 +2,7 @@ package todos
 
 import (
 	"context"
+	"fmt"
 	"regexp"
 	"strings"
 	"sync"
@@ -32,6 +33,10 @@ type Author struct {
 	Name  string
 	Email string
 	When  time.Time
+}
+
+func (a *Author) String() string {
+	return fmt.Sprintf("%s <%s>", a.Name, a.Email)
 }
 
 // ToDos represents a list of ToDo items
@@ -72,14 +77,14 @@ func NewToDos(comments comments.Comments) ToDos {
 }
 
 // Len returns the number of todos
-func (t *ToDos) Len() int {
-	return len(*t)
+func (t ToDos) Len() int {
+	return len(t)
 }
 
 // Less compares two todos by their creation time
-func (t *ToDos) Less(i, j int) bool {
-	first := (*t)[i]
-	second := (*t)[j]
+func (t ToDos) Less(i, j int) bool {
+	first := t[i]
+	second := t[j]
 	if first.Commit == nil || second.Commit == nil {
 		return false
 	}
@@ -87,15 +92,15 @@ func (t *ToDos) Less(i, j int) bool {
 }
 
 // Swap swaps two todoss
-func (t *ToDos) Swap(i, j int) {
-	temp := (*t)[i]
-	(*t)[i] = (*t)[j]
-	(*t)[j] = temp
+func (t ToDos) Swap(i, j int) {
+	temp := t[i]
+	t[i] = t[j]
+	t[j] = temp
 }
 
 // CountWithCommits returns the number of todos with an associated commit (in which that todo was added)
-func (t *ToDos) CountWithCommits() (count int) {
-	for _, todo := range *t {
+func (t ToDos) CountWithCommits() (count int) {
+	for _, todo := range t {
 		if todo.Commit != nil {
 			count++
 		}
