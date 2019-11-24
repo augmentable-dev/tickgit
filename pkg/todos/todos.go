@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"regexp"
@@ -116,12 +117,23 @@ func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
 		}
 		return false, err
 	}
-	c, err := f.Contents()
+	r, err := f.Reader()
 	if err != nil {
 		return false, err
 	}
-	contains := strings.Contains(c, t.Comment.String())
-	return contains, nil
+	defer r.Close()
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		line := s.Text()
+		if strings.Contains(line, t.Comment.String()) {
+			return true, nil
+		}
+	}
+	err = s.Err()
+	if err != nil {
+		return false, err
+	}
+	return false, nil
 }
 
 // FindBlame sets the blame information on each todo in a set of todos
