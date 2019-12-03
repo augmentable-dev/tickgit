@@ -10,8 +10,8 @@ const DefaultTemplate = `
 {{- range $index, $todo := . }}
 {{ print "\u001b[33m" }}TODO{{ print "\u001b[0m" }}: {{ .String }}
   => {{ .Comment.FilePath }}:{{ .Comment.StartLocation.Line }}:{{ .Comment.StartLocation.Pos }}
-  {{- if .Commit }}
-  => added {{ .TimeAgo }} by {{ .Commit.Author }} in {{ .Commit.Hash }}
+  {{- if .Blame }}
+  => added {{ .TimeAgo }} by {{ .Blame.Author }} in {{ .Blame.SHA }}
   {{- end }}
 {{ else }}
 no todos 🎉

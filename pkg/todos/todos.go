@@ -3,41 +3,20 @@ package todos
 import (
 	"bufio"
 	"context"
-	"fmt"
 	"regexp"
 	"strings"
-	"sync"
-	"time"
 
+	"github.com/augmentable-dev/tickgit/pkg/blame"
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 	"github.com/dustin/go-humanize"
-	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
-	"gopkg.in/src-d/go-git.v4/plumbing/storer"
 )
 
 // ToDo represents a ToDo item
 type ToDo struct {
 	comments.Comment
 	String string
-	Commit *Commit
-}
-
-// Commit represents the commit a todo originated in
-type Commit struct {
-	Hash string
-	Author
-}
-
-// Author represents the authoring of the commit a todo originated in
-type Author struct {
-	Name  string
-	Email string
-	When  time.Time
-}
-
-func (a *Author) String() string {
-	return fmt.Sprintf("%s <%s>", a.Name, a.Email)
+	Blame  *blame.Blame
 }
 
 // ToDos represents a list of ToDo items
@@ -45,10 +24,10 @@ type ToDos []*ToDo
 
 // TimeAgo returns a human readable string indicating the time since the todo was added
 func (t *ToDo) TimeAgo() string {
-	if t.Commit == nil {
+	if t.Blame == nil {
 		return "<unknown>"
 	}
-	return humanize.Time(t.Commit.Author.When)
+	return humanize.Time(t.Blame.Author.When)
 }
 
 // NewToDo produces a pointer to a ToDo from a comment
@@ -86,10 +65,10 @@ func (t ToDos) Len() int {
 func (t ToDos) Less(i, j int) bool {
 	first := t[i]
 	second := t[j]
-	if first.Commit == nil || second.Commit == nil {
+	if first.Blame == nil || second.Blame == nil {
 		return false
 	}
-	return first.Commit.Author.When.Before(second.Commit.Author.When)
+	return first.Blame.Author.When.Before(second.Blame.Author.When)
 }
 
 // Swap swaps two todoss
@@ -102,7 +81,7 @@ func (t ToDos) Swap(i, j int) {
 // CountWithCommits returns the number of todos with an associated commit (in which that todo was added)
 func (t ToDos) CountWithCommits() (count int) {
 	for _, todo := range t {
-		if todo.Commit != nil {
+		if todo.Blame != nil {
 			count++
 		}
 	}
@@ -137,68 +116,37 @@ func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
 }
 
 // FindBlame sets the blame information on each todo in a set of todos
-func (t *ToDos) FindBlame(ctx context.Context, repo *git.Repository, from *object.Commit, cb func(*object.Commit, int)) error {
-	commitIter, err := repo.Log(&git.LogOptions{
-		From: from.Hash,
-	})
-	if err != nil {
-		return err
+func (t *ToDos) FindBlame(ctx context.Context, dir, sha string) error {
+	fileMap := make(map[string]ToDos)
+	for _, todo := range *t {
+		filePath := todo.FilePath
+		if _, ok := fileMap[filePath]; !ok {
+			fileMap[filePath] = make(ToDos, 0)
+		}
+		fileMap[filePath] = append(fileMap[filePath], todo)
 	}
-	defer commitIter.Close()
 
-	remainingTodos := *t
-	prevCommit := from
-	err = commitIter.ForEach(func(commit *object.Commit) error {
-		if len(remainingTodos) == 0 {
-			return storer.ErrStop
+	for filePath, todos := range fileMap {
+		lines := make([]int, 0)
+
+		for _, todo := range todos {
+			lines = append(lines, todo.StartLocation.Line)
 		}
-		if commit.NumParents() > 1 {
-			return nil
+		blames, err := blame.Exec(ctx, filePath, &blame.Options{
+			Directory: dir,
+			Lines:     lines,
+			SHA:       sha,
+		})
+		if err != nil {
+			return err
 		}
-		select {
-		case <-ctx.Done():
-			return nil
-		default:
-			newRemainingTodos := make(ToDos, 0)
-			errs := make(chan error)
-			var wg sync.WaitGroup
-			var mux sync.Mutex
-			// TODO, if the todo item was added in the initial commit, we don't handle that correct
-			for _, todo := range remainingTodos {
-				wg.Add(1)
-				go func(todo *ToDo, commit *object.Commit, errs chan error) {
-					defer wg.Done()
-					mux.Lock()
-					exists, err := todo.existsInCommit(commit)
-					if err != nil {
-						errs <- err
-					}
-					mux.Unlock()
-					if !exists { // if the todo doesn't exist in this commit, it was added in the previous commit (previous wrt the iterator, more recent in time)
-						todo.Commit = &Commit{
-							Hash: prevCommit.Hash.String(),
-							Author: Author{
-								Name:  prevCommit.Author.Name,
-								Email: prevCommit.Author.Email,
-								When:  prevCommit.Author.When,
-							},
-						}
-					} else { // if the todo does exist in this commit, add it to the new list of remaining todos
-						newRemainingTodos = append(newRemainingTodos, todo)
-					}
-				}(todo, commit, errs)
+		for line, blame := range blames {
+			for _, todo := range todos {
+				if todo.StartLocation.Line == line {
+					todo.Blame = &blame
+				}
 			}
-			wg.Wait()
-			if cb != nil {
-				cb(commit, len(newRemainingTodos))
-			}
-			prevCommit = commit
-			remainingTodos = newRemainingTodos
-			return nil
 		}
-	})
-	if err != nil {
-		return err
 	}
 	return nil
 }

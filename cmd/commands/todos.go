@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -13,7 +12,6 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 	"gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 func init() {
@@ -58,12 +56,9 @@ var todosCmd = &cobra.Command{
 
 		ctx := context.Background()
 		// timeout after 30 seconds
-		ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-		defer cancel()
-		err = t.FindBlame(ctx, r, commit, func(commit *object.Commit, remaining int) {
-			total := len(t)
-			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
-		})
+		// ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		// defer cancel()
+		err = t.FindBlame(ctx, dir, commit.Hash.String())
 		sort.Sort(&t)
 
 		handleError(err)
