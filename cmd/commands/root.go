@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 )
 
@@ -14,9 +15,15 @@ var rootCmd = &cobra.Command{
 }
 
 // TODO clean this up
-func handleError(err error) {
+func handleError(err error, spinner *spinner.Spinner) {
 	if err != nil {
-		fmt.Println(err)
+		if spinner != nil {
+			// spinner.Suffix = ""
+			spinner.FinalMSG = err.Error()
+			spinner.Stop()
+		} else {
+			fmt.Println(err)
+		}
 		os.Exit(1)
 	}
 }

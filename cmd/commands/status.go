@@ -20,26 +20,26 @@ var statusCmd = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cwd, err := os.Getwd()
-		handleError(err)
+		handleError(err, nil)
 
 		dir := cwd
 		if len(args) == 1 {
 			dir, err = filepath.Rel(cwd, args[0])
-			handleError(err)
+			handleError(err, nil)
 		}
 
 		validateDir(dir)
 
 		r, err := git.PlainOpen(dir)
-		handleError(err)
+		handleError(err, nil)
 
 		ref, err := r.Head()
-		handleError(err)
+		handleError(err, nil)
 
 		commit, err := r.CommitObject(ref.Hash())
-		handleError(err)
+		handleError(err, nil)
 
 		err = tickgit.WriteStatus(commit, os.Stdout)
-		handleError(err)
+		handleError(err, nil)
 	},
 }
