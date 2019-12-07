@@ -70,10 +70,8 @@ type Comment struct {
 
 // SearchFile searches a file for comments. It infers the language
 func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
-	// src, err := ioutil.ReadAll(reader)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// TODO right now, enry only infers the language based on the file extension
+	// we should add some "preview" bytes from the file so that it has some sample content to examine
 	lang := Language(enry.GetLanguage(filepath.Base(filePath), nil))
 	if enry.IsVendor(filePath) {
 		return nil
