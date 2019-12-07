@@ -1,9 +1,7 @@
 package comments
 
 import (
-	"bytes"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -71,41 +69,37 @@ type Comment struct {
 }
 
 // SearchFile searches a file for comments. It infers the language
-func SearchFile(filePath string, reader io.Reader) (Comments, error) {
-	src, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return nil, err
-	}
-	lang := Language(enry.GetLanguage(filepath.Base(filePath), src))
+func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
+	// TODO right now, enry only infers the language based on the file extension
+	// we should add some "preview" bytes from the file so that it has some sample content to examine
+	lang := Language(enry.GetLanguage(filepath.Base(filePath), nil))
 	if enry.IsVendor(filePath) {
-		return nil, nil
+		return nil
 	}
 	options, ok := LanguageParseOptions[lang]
 	if !ok { // TODO provide a default parse option?
-		return nil, nil
+		return nil
 	}
 	commentParser, err := lege.NewParser(options)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	collections, err := commentParser.Parse(bytes.NewReader(src))
+	collections, err := commentParser.Parse(reader)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	comments := make(Comments, 0)
 	for _, c := range collections {
 		comment := Comment{*c, filePath}
-		comments = append(comments, &comment)
+		cb(&comment)
 	}
 
-	return comments, nil
+	return nil
 }
 
 // SearchDir searches a directory for comments
-func SearchDir(dirPath string) (Comments, error) {
-	found := make(Comments, 0)
+func SearchDir(dirPath string, cb func(comment *Comment)) error {
 	err := godirwalk.Walk(dirPath, &godirwalk.Options{
 		Callback: func(path string, de *godirwalk.Dirent) error {
 			localPath, err := filepath.Rel(dirPath, path)
@@ -130,36 +124,32 @@ func SearchDir(dirPath string) (Comments, error) {
 				if err != nil {
 					return err
 				}
-				defer f.Close()
-				t, err := SearchFile(localPath, f)
+				err = SearchFile(localPath, f, cb)
 				if err != nil {
 					return err
 				}
-				c := Comments(t)
-				found = append(found, c...)
+				f.Close()
 			}
 			return nil
 		},
 		Unsorted: true,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return found, nil
+	return nil
 }
 
 // SearchCommit searches all files in the tree of a given commit
-func SearchCommit(commit *object.Commit) (Comments, error) {
-	found := make(Comments, 0)
-	t, err := commit.Tree()
-	if err != nil {
-		return nil, err
-	}
-
+func SearchCommit(commit *object.Commit, cb func(*Comment)) error {
 	var wg sync.WaitGroup
 	errs := make(chan error)
 
-	fileIter := t.Files()
+	fileIter, err := commit.Files()
+	if err != nil {
+		return err
+	}
+	defer fileIter.Close()
 	fileIter.ForEach(func(file *object.File) error {
 		if file.Mode.IsFile() {
 			wg.Add(1)
@@ -171,20 +161,17 @@ func SearchCommit(commit *object.Commit) (Comments, error) {
 					errs <- err
 					return
 				}
-				c, err := SearchFile(file.Name, r)
+				err = SearchFile(file.Name, r, cb)
 				if err != nil {
 					errs <- err
 					return
 				}
 
-				for _, comment := range c {
-					found = append(found, comment)
-				}
 			}()
 		}
 		return nil
 	})
 
 	wg.Wait()
-	return found, nil
+	return nil
 }

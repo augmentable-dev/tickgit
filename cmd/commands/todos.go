@@ -12,8 +12,6 @@ import (
 	"github.com/augmentable-dev/tickgit/pkg/todos"
 	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
-	"gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 func init() {
@@ -27,48 +25,44 @@ var todosCmd = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+		s.HideCursor = true
 		s.Suffix = " finding TODOs"
 		s.Writer = os.Stderr
 		s.Start()
 
 		cwd, err := os.Getwd()
-		handleError(err)
+		handleError(err, s)
 
 		dir := cwd
 		if len(args) == 1 {
 			dir, err = filepath.Rel(cwd, args[0])
-			handleError(err)
+			handleError(err, s)
 		}
 
 		validateDir(dir)
 
-		r, err := git.PlainOpen(dir)
-		handleError(err)
+		foundToDos := make(todos.ToDos, 0)
+		err = comments.SearchDir(dir, func(comment *comments.Comment) {
+			todo := todos.NewToDo(*comment)
+			if todo != nil {
+				foundToDos = append(foundToDos, todo)
+				s.Suffix = fmt.Sprintf(" %d TODOs found", len(foundToDos))
+			}
+		})
+		handleError(err, s)
 
-		ref, err := r.Head()
-		handleError(err)
-
-		commit, err := r.CommitObject(ref.Hash())
-		handleError(err)
-
-		comments, err := comments.SearchDir(dir)
-		handleError(err)
-
-		t := todos.NewToDos(comments)
-
+		s.Suffix = fmt.Sprintf(" blaming %d TODOs", len(foundToDos))
 		ctx := context.Background()
 		// timeout after 30 seconds
-		ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-		defer cancel()
-		err = t.FindBlame(ctx, r, commit, func(commit *object.Commit, remaining int) {
-			total := len(t)
-			s.Suffix = fmt.Sprintf(" (%d/%d) %s: %s", total-remaining, total, commit.Hash, commit.Author.When)
-		})
-		sort.Sort(&t)
+		// ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		// defer cancel()
+		err = foundToDos.FindBlame(ctx, dir)
+		sort.Sort(&foundToDos)
 
-		handleError(err)
+		handleError(err, s)
 
 		s.Stop()
-		todos.WriteTodos(t, os.Stdout)
+
+		todos.WriteTodos(foundToDos, os.Stdout)
 	},
 }
