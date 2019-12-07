@@ -116,7 +116,7 @@ func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
 }
 
 // FindBlame sets the blame information on each todo in a set of todos
-func (t *ToDos) FindBlame(ctx context.Context, dir, sha string) error {
+func (t *ToDos) FindBlame(ctx context.Context, dir string) error {
 	fileMap := make(map[string]ToDos)
 	for _, todo := range *t {
 		filePath := todo.FilePath
@@ -135,7 +135,6 @@ func (t *ToDos) FindBlame(ctx context.Context, dir, sha string) error {
 		blames, err := blame.Exec(ctx, filePath, &blame.Options{
 			Directory: dir,
 			Lines:     lines,
-			SHA:       sha,
 		})
 		if err != nil {
 			return err

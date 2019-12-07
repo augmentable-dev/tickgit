@@ -11,7 +11,6 @@ import (
 	"github.com/augmentable-dev/tickgit/pkg/todos"
 	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
-	"gopkg.in/src-d/go-git.v4"
 )
 
 func init() {
@@ -40,15 +39,6 @@ var todosCmd = &cobra.Command{
 
 		validateDir(dir)
 
-		r, err := git.PlainOpen(dir)
-		handleError(err)
-
-		ref, err := r.Head()
-		handleError(err)
-
-		commit, err := r.CommitObject(ref.Hash())
-		handleError(err)
-
 		comments, err := comments.SearchDir(dir)
 		handleError(err)
 
@@ -58,7 +48,7 @@ var todosCmd = &cobra.Command{
 		// timeout after 30 seconds
 		// ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 		// defer cancel()
-		err = t.FindBlame(ctx, dir, commit.Hash.String())
+		err = t.FindBlame(ctx, dir)
 		sort.Sort(&t)
 
 		handleError(err)
