@@ -7,9 +7,9 @@
 
 ## tickgit 🎟️
 
-`tickgit` is an experiment in code-based project management. It's a tool to help you manage tickets, todo items, and checklists within a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
+`tickgit` is a tool to help you manage tickets, todo items, and checklists within a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
 
-It's certainly not meant to replace project management tools such as JIRA, Trello, etc. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
+It's not meant to replace full-fledged project management tools such as JIRA or Trello. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
 
 ### TODOs
 
@@ -38,7 +38,7 @@ TODO: type it.
 
 #### Coming Soon
 
-- [ ] History - get a better sense of how old TODOs are, when they were introduced and by whom
+- [x] History - get a better sense of how old TODOs are, when they were introduced and by whom
 - [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
 
 ### Tickets
