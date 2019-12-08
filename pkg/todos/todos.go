@@ -142,7 +142,8 @@ func (t *ToDos) FindBlame(ctx context.Context, dir string) error {
 		for line, blame := range blames {
 			for _, todo := range todos {
 				if todo.StartLocation.Line == line {
-					todo.Blame = &blame
+					b := blame
+					todo.Blame = &b
 				}
 			}
 		}
