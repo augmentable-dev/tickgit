@@ -18,22 +18,23 @@ It's not meant to replace full-fledged project management tools such as JIRA or 
 ```
 # tickgit todos ~/Desktop/facebook/react
 ...
-TODO: does clang define __GNUC__ ?
-  => /Users/.../Desktop/facebook/react/scripts/perf-counters/src/portability.h:34:3
+TODO:
+  => packages/scheduler/src/__tests__/SchedulerBrowser-test.js:85:9
+  => added 1 month ago by Andrew Clark <git@andrewclark.io> in a2e05b6c148b25590884e8911d4d4acfcb76a487
 
-TODO: FIXME! Without this implemented properly, the JIT
-  => /Users/.../Desktop/facebook/react/scripts/perf-counters/src/portability.h:133:3
+TODO: Scheduler no longer requires these methods to be polyfilled. But
+  => packages/scheduler/src/__tests__/SchedulerBrowser-test.js:77:7
+  => added 1 month ago by Andrew Clark <git@andrewclark.io> in a2e05b6c148b25590884e8911d4d4acfcb76a487
 
-TODO: it's awkward to create a bundle for this but if we don't, the package
-  => /Users/.../Desktop/facebook/react/scripts/rollup/bundles.js:454:7
+TODO: Scheduler no longer requires these methods to be polyfilled. But
+  => packages/scheduler/src/forks/SchedulerHostConfig.default.js:77:7
+  => added 1 month ago by Andrew Clark <git@andrewclark.io> in a2e05b6c148b25590884e8911d4d4acfcb76a487
 
-TODO: this is too permissive.
-  => /Users/.../Desktop/facebook/react/scripts/rollup/validate/eslintrc.umd.js:20:7
+TODO: useTransition hook instead.
+  => fixtures/concurrent/time-slicing/src/index.js:110:11
+  => added 3 weeks ago by Sebastian Markbåge <sebastian@calyptus.eu> in 3ad076472ce9108b9b8a6a6fe039244b74a34392
 
-TODO: type it.
-  => /Users/.../Desktop/facebook/react/scripts/shared/inlinedHostConfigs.js:25:27
-
-123 TODOs Found 📝
+128 TODOs Found 📝
 ```
 
 #### Coming Soon
