@@ -72,12 +72,13 @@ var todosCmd = &cobra.Command{
 		if csvOutput {
 			w := csv.NewWriter(os.Stdout)
 			err := w.Write([]string{
-				"text", "start_line", "start_position", "end_line", "end_position", "author", "author_email", "author_sha", "author_time",
+				"text", "file_path", "start_line", "start_position", "end_line", "end_position", "author", "author_email", "author_sha", "author_time",
 			})
 			handleError(err, s)
 			for _, todo := range foundToDos {
 				err := w.Write([]string{
 					todo.String,
+					todo.FilePath,
 					strconv.Itoa(todo.StartLocation.Line),
 					strconv.Itoa(todo.StartLocation.Pos),
 					strconv.Itoa(todo.EndLocation.Line),
