@@ -16,11 +16,11 @@ import (
 // CStyleCommentOptions ...
 var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 	Boundaries: []lege.Boundary{
-		lege.Boundary{
+		{
 			Start: "//",
 			End:   "\n",
 		},
-		lege.Boundary{
+		{
 			Start: "/*",
 			End:   "*/",
 		},
@@ -30,7 +30,7 @@ var CStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 // HashStyleCommentOptions ...
 var HashStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 	Boundaries: []lege.Boundary{
-		lege.Boundary{
+		{
 			Start: "#",
 			End:   "\n",
 		},
@@ -52,7 +52,7 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"Ruby":         HashStyleCommentOptions,
 	"PHP":          CStyleCommentOptions,
 	"Shell":        HashStyleCommentOptions,
-	"Visual Basic": &lege.ParseOptions{Boundaries: []lege.Boundary{lege.Boundary{Start: "'", End: "\n"}}},
+	"Visual Basic": {Boundaries: []lege.Boundary{{Start: "'", End: "\n"}}},
 	"TypeScript":   CStyleCommentOptions,
 	"Objective-C":  CStyleCommentOptions,
 	"Groovy":       CStyleCommentOptions,
