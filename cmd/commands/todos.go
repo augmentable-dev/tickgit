@@ -2,10 +2,12 @@ package commands
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/augmentable-dev/tickgit/pkg/comments"
@@ -14,7 +16,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var csvOutput bool
+
 func init() {
+	todosCmd.Flags().BoolVar(&csvOutput, "csv-output", false, "specify whether or not output should be in CSV format")
+
 	rootCmd.AddCommand(todosCmd)
 }
 
@@ -63,6 +69,38 @@ var todosCmd = &cobra.Command{
 
 		s.Stop()
 
-		todos.WriteTodos(foundToDos, os.Stdout)
+		if csvOutput {
+			w := csv.NewWriter(os.Stdout)
+			err := w.Write([]string{
+				"text", "file_path", "start_line", "start_position", "end_line", "end_position", "author", "author_email", "author_sha", "author_time",
+			})
+			handleError(err, s)
+
+			for _, todo := range foundToDos {
+				err := w.Write([]string{
+					todo.String,
+					todo.FilePath,
+					strconv.Itoa(todo.StartLocation.Line),
+					strconv.Itoa(todo.StartLocation.Pos),
+					strconv.Itoa(todo.EndLocation.Line),
+					strconv.Itoa(todo.EndLocation.Pos),
+					todo.Blame.Author.Name,
+					todo.Blame.Author.Email,
+					todo.Blame.SHA,
+					todo.Blame.Author.When.Format(time.RFC3339),
+				})
+				handleError(err, s)
+			}
+
+			// Write any buffered data to the underlying writer (standard output).
+			w.Flush()
+
+			err = w.Error()
+			handleError(err, s)
+
+		} else {
+			todos.WriteTodos(foundToDos, os.Stdout)
+		}
+
 	},
 }
