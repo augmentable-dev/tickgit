@@ -19,7 +19,7 @@ import (
 var csvOutput bool
 
 func init() {
-	todosCmd.Flags().BoolVar(&csvOutput, "csv-output", false, "specify whether or not output should be CSV")
+	todosCmd.Flags().BoolVar(&csvOutput, "csv-output", false, "specify whether or not output should be in CSV format")
 
 	rootCmd.AddCommand(todosCmd)
 }
@@ -75,6 +75,7 @@ var todosCmd = &cobra.Command{
 				"text", "file_path", "start_line", "start_position", "end_line", "end_position", "author", "author_email", "author_sha", "author_time",
 			})
 			handleError(err, s)
+
 			for _, todo := range foundToDos {
 				err := w.Write([]string{
 					todo.String,
@@ -90,6 +91,7 @@ var todosCmd = &cobra.Command{
 				})
 				handleError(err, s)
 			}
+
 			// Write any buffered data to the underlying writer (standard output).
 			w.Flush()
 
