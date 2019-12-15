@@ -37,6 +37,16 @@ var HashStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
 	},
 }
 
+// LispStyleCommentOptions ..
+var LispStyleCommentOptions *lege.ParseOptions = &lege.ParseOptions{
+	Boundaries: []lege.Boundary{
+		{
+			Start: ";",
+			End:   "\n",
+		},
+	},
+}
+
 // Language is a source language (i.e. "Go")
 type Language string
 
@@ -57,6 +67,8 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"Objective-C":  CStyleCommentOptions,
 	"Groovy":       CStyleCommentOptions,
 	"Swift":        CStyleCommentOptions,
+	"Common Lisp":  LispStyleCommentOptions,
+	"Emacs Lisp":   LispStyleCommentOptions,
 }
 
 // Comments is a list of comments
