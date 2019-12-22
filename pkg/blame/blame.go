@@ -18,7 +18,7 @@ type Options struct {
 	Lines     []int
 }
 
-// Blame represents the "blame" of a particlar line or range of lines
+// Blame represents the "blame" of a particular line or range of lines
 type Blame struct {
 	SHA       string
 	Author    Event
