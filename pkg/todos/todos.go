@@ -71,7 +71,7 @@ func (t ToDos) Less(i, j int) bool {
 	return first.Blame.Author.When.Before(second.Blame.Author.When)
 }
 
-// Swap swaps two todoss
+// Swap swaps two todos
 func (t ToDos) Swap(i, j int) {
 	temp := t[i]
 	t[i] = t[j]
