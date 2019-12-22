@@ -13,7 +13,7 @@ func TestJSFiles(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(comments) != 2 {
+	if len(comments) != 3 {
 		t.Fail()
 	}
 }
