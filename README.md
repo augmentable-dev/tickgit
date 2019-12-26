@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/augmentable-dev/tickgit)](https://goreportcard.com/report/github.com/augmentable-dev/tickgit)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/augmentable-dev/tickgit)
 [![Coverage](http://gocover.io/_badge/github.com/augmentable-dev/tickgit)](http://gocover.io/github.com/augmentable-dev/tickgit)
-[![TODOs](https://img.shields.io/endpoint?url=https%3A%2F%2Ftickgit.augmentable.dev%2Ftodos-badge%3Frepo%3Dhttps%3A%2F%2Fgithub.com%2Faugmentable-dev%2Ftickgit)](https://todos.augmentable.dev/?repo=https://github.com/augmentable-dev/tickgit)
+[![TODOs](https://img.shields.io/endpoint?url=https%3A%2F%2Ftickgit.augmentable.dev%2Ftodos-badge%3Frepo%3Dhttps%3A%2F%2Fgithub.com%2Faugmentable-dev%2Ftickgit)](https://todos.tickg.it/?repo=https://github.com/augmentable-dev/tickgit)
 
 ## tickgit 🎟️
 
@@ -36,6 +36,8 @@ TODO: useTransition hook instead.
 
 128 TODOs Found 📝
 ```
+
+Check out [an example](https://todos.tickg.it/?repo=https://github.com/kubernetes/kubernetes) of the TODOs tickgit will surface for the Kubernetes codebase.
 
 #### Coming Soon
 
