@@ -69,6 +69,7 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"Swift":        CStyleCommentOptions,
 	"Common Lisp":  LispStyleCommentOptions,
 	"Emacs Lisp":   LispStyleCommentOptions,
+	"R":            HashStyleCommentOptions,
 }
 
 // Comments is a list of comments
