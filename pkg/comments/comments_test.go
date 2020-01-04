@@ -31,3 +31,19 @@ func TestLispFiles(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestRustFiles(t *testing.T) {
+	var comments Comments
+	err := SearchDir("testdata/rust", func(comment *Comment) {
+		comments = append(comments, comment)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// TODO: break the different comment types out into separate files?
+	// once the issue with lege is worked out for handling the different comment types
+	if len(comments) != 21 {
+		t.Fail()
+	}
+}
