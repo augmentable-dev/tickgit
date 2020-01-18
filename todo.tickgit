@@ -1,7 +1,0 @@
-goal "Basic command line tool" {
-    description = "finish up a simple cli with no options or arguments, it just prints out a summary report of the git repo in the CWD"
-
-    task "Implement cobra" {
-        status = "done"
-    }
-}
