@@ -47,3 +47,17 @@ func TestRustFiles(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestPHPFiles(t *testing.T) {
+	var comments Comments
+	err := SearchDir("testdata/php", func(comment *Comment) {
+		comments = append(comments, comment)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(comments) != 3 {
+		t.Fail()
+	}
+}

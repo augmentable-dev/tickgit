@@ -1,7 +1,9 @@
 package comments
 
 import (
+	"bytes"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,9 +26,19 @@ type Comment struct {
 
 // SearchFile searches a file for comments. It infers the language
 func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
-	// TODO right now, enry only infers the language based on the file extension
-	// we should add some "preview" bytes from the file so that it has some sample content to examine
-	lang := Language(enry.GetLanguage(filepath.Base(filePath), nil))
+	// create a preview reader that reads in some of the file for enry to better identify the language
+	var buf bytes.Buffer
+	tee := io.TeeReader(reader, &buf)
+	previewReader := io.LimitReader(tee, 1000)
+	preview, err := ioutil.ReadAll(previewReader)
+	if err != nil {
+		return err
+	}
+
+	// create a new reader concatenating the preview and the original reader (which has now been read from)
+	fullReader := io.MultiReader(strings.NewReader(buf.String()), reader)
+
+	lang := Language(enry.GetLanguage(filepath.Base(filePath), preview))
 	if enry.IsVendor(filePath) {
 		return nil
 	}
@@ -39,7 +51,7 @@ func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
 		return err
 	}
 
-	collections, err := commentParser.Parse(reader)
+	collections, err := commentParser.Parse(fullReader)
 	if err != nil {
 		return err
 	}
