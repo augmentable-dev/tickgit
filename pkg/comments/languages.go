@@ -49,7 +49,7 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"JavaScript":   CStyleCommentOptions,
 	"Python":       HashStyleCommentOptions,
 	"Ruby":         HashStyleCommentOptions,
-	"PHP":          CStyleCommentOptions,
+	"PHP":          {Boundaries: append(CStyleCommentOptions.Boundaries, HashStyleCommentOptions.Boundaries...)},
 	"Shell":        HashStyleCommentOptions,
 	"Visual Basic": {Boundaries: []lege.Boundary{{Start: "'", End: "\n"}}},
 	"TypeScript":   CStyleCommentOptions,
