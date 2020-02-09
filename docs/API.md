@@ -2,7 +2,7 @@
 
 ### TODOs Badge
 
-`GET` requests to `https://api.tickgit.com/todos-badge` with a `repo` query param:
+`GET` requests to `https://api.tickgit.com/badge` with a `repo` query param:
 
 ```
 http://api.tickgit.com/todos-badge?repo=https://github.com/facebook/react

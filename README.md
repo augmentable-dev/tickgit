@@ -7,7 +7,7 @@
 
 ## tickgit 🎟️
 
-`tickgit` is a tool to help you manage tickets, todo items, and checklists within a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
+`tickgit` is a tool to help you manage tickets, todo items, and checklists in a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
 
 It's not meant to replace full-fledged project management tools such as JIRA or Trello. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
 
@@ -44,50 +44,6 @@ Check out [an example](https://todos.tickg.it/?repo=https://github.com/kubernete
 - [x] History - get a better sense of how old TODOs are, when they were introduced and by whom
 - [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
 
-### Tickets
-
-Tickets are a way of defining more complex tasks in your codebase as config files. Currently, tickets are HCL files that look like the following:
-
-```hcl
-# rocketship.tickgit
-
-goal "Build the Rocketship 🚀" {
-    description = "Finalize the construction of the Moonblaster 2000"
-
-    task "Construct the engines" {
-        status = "done"
-    }
-
-    task "Attach the engines" {
-        status = "pending"
-    }
-
-    task "Thoroughly test the engines" {
-        status = "pending"
-    }
-}
-```
-
-```
-$ tickgit status
-=== Build the Rocketship 🚀 ⏳
-  --- 1/3 tasks completed (2 remaining)
-  --- 33% completed
-
-  ✅ Construct the engines
-  ⏳ Attach the engines
-  ⏳ Thoroughly test the engines
-```
-
-#### Coming Soon
-
-- [ ] Simpler ticket definitions - in YAML and/or other (less verbose) config languages
-- [ ] More complex tickets - more states, dependencies on other tickets, etc
-
-### Checklists
-
-_Coming soon_. Checklists will be a way of parsing Markdown checklists in your codebase (either in `.md` files, or within your comments).
-
 
 ### Why is this useful?
 
@@ -110,10 +66,9 @@ brew tap augmentable-dev/tickgit
 brew install tickgit
 ```
 
-
 ### Usage
 
-The most up to date usage will be the output of `tickgit --help`. The most common usage, however, is `tickgit status` which will print a status report of tickets for a given git repository. By default, it uses the current working directory.
+The most up to date usage will be the output of `tickgit --help`.
 
 ### API
 
