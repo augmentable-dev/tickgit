@@ -13,10 +13,10 @@ It's not meant to replace full-fledged project management tools such as JIRA or 
 
 ### TODOs
 
-`tickgit todos` will scan a codebase and identify any TODO items in the comments. It will output a report like so:
+`tickgit` will scan a codebase and identify any TODO items in the comments. It will output a report like so:
 
 ```
-# tickgit todos ~/Desktop/facebook/react
+# tickgit ~/Desktop/facebook/react
 ...
 TODO:
   => packages/scheduler/src/__tests__/SchedulerBrowser-test.js:85:9
@@ -37,7 +37,7 @@ TODO: useTransition hook instead.
 128 TODOs Found 📝
 ```
 
-Check out [an example](https://todos.tickg.it/?repo=https://github.com/kubernetes/kubernetes) of the TODOs tickgit will surface for the Kubernetes codebase.
+Check out [an example](https://www.tickgit.com/browse?repo=github.com/kubernetes/kubernetes) of the TODOs tickgit will surface for the Kubernetes codebase.
 
 #### Coming Soon
 
