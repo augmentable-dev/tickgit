@@ -7,7 +7,7 @@
 
 ## tickgit 🎟️
 
-`tickgit` is a tool to help you manage tickets, todo items, and checklists in a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
+`tickgit` is a tool to help you manage latent work in a codebase. Use the `tickgit` command to view pending tasks, progress reports, completion summaries and historical data (using `git` history).
 
 It's not meant to replace full-fledged project management tools such as JIRA or Trello. It will, hopefully, be a useful way to augment those tools with project management patterns that coexist with your code. As such, it's primary audience is software engineers.
 
@@ -41,21 +41,12 @@ Check out [an example](https://www.tickgit.com/browse?repo=github.com/kubernetes
 
 #### Coming Soon
 
-- [x] History - get a better sense of how old TODOs are, when they were introduced and by whom
+- [x] Blame - get a better sense of how old TODOs are, when they were introduced and by whom
 - [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
-
-
-### Why is this useful?
-
-This project is a proof-of-concept. Keeping tickets next to the code they're meant to describe could have the following benefits:
-
-- Tickets live with the code, no need for a 3rd party tool or system (anyone with git access to the repository has access to contributing to the tickets)
-- Updating a ticket's status and merging/committing code are the same action, no need to synchronize across multiple tools
-- Source of truth for a project's ticket history is now the git history, which can be queried and analyzed
-- Current status of a `goal` can be reported by simply parsing the repository's `head`
-- Less context switching between the codebase itself and the system describing "what needs to be done"
-
-Generally speaking, this is an experiment in ways to do project management, within the codebase of a project. With a `git` history and some clever parsing, quite a bit of metadata about a project can be gleaned from its codebase. Let's see how useful we can make that information.
+- [ ] More `TODO` type phrases to match, such as `FIXME`, `XXX`, `HACK`, or customized alternatives.
+- [ ] More configurability (e.g. custom ignore paths)
+- [ ] Markdown parsing
+- [ ] More thorough historical stats
 
 ### Installation
 
