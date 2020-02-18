@@ -137,7 +137,8 @@ func (t *ToDos) FindBlame(ctx context.Context, dir string) error {
 			Lines:     lines,
 		})
 		if err != nil {
-			return err
+			// TODO (patrickdevivo) report this error
+			continue
 		}
 		for line, blame := range blames {
 			for _, todo := range todos {

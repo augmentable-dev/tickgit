@@ -1,34 +1,23 @@
 ## API
 
-If you'd like to access tickgit information about public `git` repositories, you can use our API.
-
-### TODOs
-
-`GET` requests to `https://tickgit.augmentable.dev/todos` with the `repo` query param populated with the URL of a git repo, like so:
-
-```
-https://tickgit.augmentable.dev/todos?repo=https://github.com/facebook/react
-```
-Will return a simple JSON response:
-
-```
-{"todos":125}
-```
-
-Indicating the total count of TODOs found in the `HEAD` of that repository.
-
-To indicate a branch, send a `branch` query param supplying the branch name.
-
-_more coming soon!_
-
 ### TODOs Badge
 
-Similarly, `GET` requests to `https://tickgit.augmentable.dev/todos-badge` with the same `repo` query param:
+`GET` requests to `https://api.tickgit.com/badgen` with a `repo` path segment:
 
 ```
-http://tickgit.augmentable.dev/todos-badge?repo=https://github.com/facebook/react
+https://api.tickgit.com/badgen/github.com/facebook/react
 ```
 
-The `branch` query param will also work as above.
+Supplying a `branch` segment will lookup a specific branch. `master` is the branch used if none is specified.
 
-Will return JSON that can be fed into a shields.io badge: [https://shields.io/endpoint](https://shields.io/endpoint)
+```
+https://api.tickgit.com/badgen/github.com/facebook/react/branch-name
+```
+
+Will return JSON that can be fed into a badgen badge: [https://badgen.net/https](https://badgen.net/https)
+
+```
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/augmentable-dev/tickgit)](https://www.tickgit.com/browse?repo=github.com/augmentable-dev/tickgit)
+```
+
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/augmentable-dev/tickgit)](https://www.tickgit.com/browse?repo=github.com/augmentable-dev/tickgit)

@@ -20,8 +20,6 @@ var csvOutput bool
 
 func init() {
 	todosCmd.Flags().BoolVar(&csvOutput, "csv-output", false, "specify whether or not output should be in CSV format")
-
-	rootCmd.AddCommand(todosCmd)
 }
 
 var todosCmd = &cobra.Command{
