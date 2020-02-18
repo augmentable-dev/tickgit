@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/augmentable-dev/tickgit)](https://goreportcard.com/report/github.com/augmentable-dev/tickgit)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/augmentable-dev/tickgit)
 [![Coverage](http://gocover.io/_badge/github.com/augmentable-dev/tickgit)](http://gocover.io/github.com/augmentable-dev/tickgit)
-[![TODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/augmentable-dev/tickgit)](https://www.tickgit.com/browse?repo=github.com/augmentable-dev/tickgit)
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/augmentable-dev/tickgit)](https://www.tickgit.com/browse?repo=github.com/augmentable-dev/tickgit)
 
 ## tickgit 🎟️
 
