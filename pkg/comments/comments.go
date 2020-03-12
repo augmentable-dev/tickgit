@@ -43,7 +43,7 @@ func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
 		return nil
 	}
 	options, ok := LanguageParseOptions[lang]
-	if !ok { // TODO provide a default parse option?
+	if !ok { // TODO provide a default parse option for when we don't know how to handle a language? I.e. default to CStyle comments say
 		return nil
 	}
 	commentParser, err := lege.NewParser(options)

@@ -3,7 +3,6 @@ package todos
 import (
 	"bufio"
 	"context"
-	"regexp"
 	"strings"
 
 	"github.com/augmentable-dev/tickgit/pkg/blame"
@@ -16,6 +15,7 @@ import (
 type ToDo struct {
 	comments.Comment
 	String string
+	Phrase string
 	Blame  *blame.Blame
 }
 
@@ -32,16 +32,28 @@ func (t *ToDo) TimeAgo() string {
 
 // NewToDo produces a pointer to a ToDo from a comment
 func NewToDo(comment comments.Comment) *ToDo {
-	s := comment.String()
-	if !strings.Contains(s, "TODO") {
-		return nil
+	// FIXME this should be configurable and probably NOT hardcoded here
+	// in fact, this list might be too expansive for a sensible default
+	startingMatchPhrases := []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
+	var matchPhrases []string
+	for _, phrase := range startingMatchPhrases {
+		// populates matchPhrases with the contents of startingMatchPhrases plus the @+lowerCase version of each phrase
+		matchPhrases = append(matchPhrases, phrase, "@"+strings.ToLower(phrase))
 	}
-	re := regexp.MustCompile(`TODO(:|,)?`)
-	s = re.ReplaceAllLiteralString(comment.String(), "")
-	s = strings.Trim(s, " ")
 
-	todo := ToDo{Comment: comment, String: s}
-	return &todo
+	for _, phrase := range matchPhrases {
+		s := comment.String()
+		if strings.Contains(s, phrase) {
+			todo := ToDo{
+				Comment: comment,
+				String:  strings.Trim(s, " "),
+				Phrase:  phrase,
+			}
+			return &todo
+		}
+	}
+
+	return nil
 }
 
 // NewToDos produces a list of ToDos from a list of comments
