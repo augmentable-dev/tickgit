@@ -13,10 +13,10 @@ brews:
     owner: augmentable-dev
     name: homebrew-tickgit
   commit_author:
-    name: augmentable
-    email: tickgit@augmentable.io
-  homepage: "https://augmentable.io/"
-  description: "Tickets as config"
+    name: tickgit
+    email: support@tickgit.com
+  homepage: "https://www.tickgit.com/"
+  description: "Surface TODO comments in any codebase"
 
 archives:
 - replacements:
