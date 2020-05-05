@@ -41,6 +41,7 @@ type Language string
 
 // LanguageParseOptions keeps track of source languages and their corresponding comment options
 var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.ParseOptions{
+	// TODO this map should probably be sorted in some reasonable way - alphabetically?
 	"Go":           CStyleCommentOptions,
 	"Java":         CStyleCommentOptions,
 	"C":            CStyleCommentOptions,
@@ -59,8 +60,8 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	"Common Lisp":  LispStyleCommentOptions,
 	"Emacs Lisp":   LispStyleCommentOptions,
 	"R":            HashStyleCommentOptions,
-
 	// TODO Currently, the underlying pkg that does the parsing/plucking (lege) doesn't properly support precedance
 	// so lines beginning with /// or //! will be picked up by this start // and include a / or ! preceding the comment
-	"Rust": {Boundaries: []lege.Boundary{{Start: "///", End: "\n"}, {Start: "//!", End: "\n"}, {Start: "//", End: "\n"}}},
+	"Rust":   {Boundaries: []lege.Boundary{{Start: "///", End: "\n"}, {Start: "//!", End: "\n"}, {Start: "//", End: "\n"}}},
+	"Kotlin": CStyleCommentOptions,
 }
