@@ -61,3 +61,17 @@ func TestPHPFiles(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestKotlinFiles(t *testing.T) {
+	var comments Comments
+	err := SearchDir("testdata/kotlin", func(comment *Comment) {
+		comments = append(comments, comment)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(comments) != 2 {
+		t.Fail()
+	}
+}
