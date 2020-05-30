@@ -75,3 +75,17 @@ func TestKotlinFiles(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestJuliaFiles(t *testing.T) {
+	var comments Comments
+	err := SearchDir("testdata/julia", func(comment *Comment) {
+		comments = append(comments, comment)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(comments) != 3 {
+		t.Fail()
+	}
+}

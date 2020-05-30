@@ -10,8 +10,8 @@ import (
 	"sync"
 
 	"github.com/augmentable-dev/lege"
+	"github.com/go-enry/go-enry/v2"
 	"github.com/karrick/godirwalk"
-	"github.com/src-d/enry/v2"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
