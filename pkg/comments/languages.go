@@ -64,5 +64,8 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	// so lines beginning with /// or //! will be picked up by this start // and include a / or ! preceding the comment
 	"Rust":   {Boundaries: []lege.Boundary{{Start: "///", End: "\n"}, {Start: "//!", End: "\n"}, {Start: "//", End: "\n"}}},
 	"Kotlin": CStyleCommentOptions,
-	"Julia":  {Boundaries: []lege.Boundary{{Start: "#=", End: "=#"}, {Start: "#", End: "\n"}}},
+
+	// TODO unfortunately, lege does't seem to handle the below boundaries very well, similar issue as to above I believe. Something with precendance?
+	// Multi-line comments are not getting picked up...
+	"Julia": {Boundaries: []lege.Boundary{{Start: "#=", End: "=#"}, {Start: "#", End: "\n"}}},
 }
