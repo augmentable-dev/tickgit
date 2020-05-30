@@ -64,4 +64,5 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 	// so lines beginning with /// or //! will be picked up by this start // and include a / or ! preceding the comment
 	"Rust":   {Boundaries: []lege.Boundary{{Start: "///", End: "\n"}, {Start: "//!", End: "\n"}, {Start: "//", End: "\n"}}},
 	"Kotlin": CStyleCommentOptions,
+	"Julia":  {Boundaries: []lege.Boundary{{Start: "#=", End: "=#"}, {Start: "#", End: "\n"}}},
 }
