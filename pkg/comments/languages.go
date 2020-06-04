@@ -67,5 +67,6 @@ var LanguageParseOptions map[Language]*lege.ParseOptions = map[Language]*lege.Pa
 
 	// TODO unfortunately, lege does't seem to handle the below boundaries very well, similar issue as to above I believe. Something with precendance?
 	// Multi-line comments are not getting picked up...
-	"Julia": {Boundaries: []lege.Boundary{{Start: "#=", End: "=#"}, {Start: "#", End: "\n"}}},
+	"Julia":  {Boundaries: []lege.Boundary{{Start: "#=", End: "=#"}, {Start: "#", End: "\n"}}},
+	"Elixir": HashStyleCommentOptions,
 }
