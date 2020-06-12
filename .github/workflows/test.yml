@@ -16,11 +16,16 @@ jobs:
 
     - name: Vet
       run: go vet -v ./...
-
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v1
-      with:
-        version: v1.26
     
     - name: Test
       run: go test -v ./...
+
+    lint:
+      name: Lint
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: golangci-lint
+          uses: golangci/golangci-lint-action@v1
+          with:
+            version: v1.26
