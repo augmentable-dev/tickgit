@@ -1,14 +1,12 @@
 package todos
 
 import (
-	"bufio"
 	"context"
 	"strings"
 
 	"github.com/augmentable-dev/tickgit/pkg/blame"
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 	"github.com/dustin/go-humanize"
-	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 // ToDo represents a ToDo item
@@ -98,33 +96,6 @@ func (t ToDos) CountWithCommits() (count int) {
 		}
 	}
 	return count
-}
-
-func (t *ToDo) existsInCommit(commit *object.Commit) (bool, error) {
-	f, err := commit.File(t.FilePath)
-	if err != nil {
-		if err == object.ErrFileNotFound {
-			return false, nil
-		}
-		return false, err
-	}
-	r, err := f.Reader()
-	if err != nil {
-		return false, err
-	}
-	defer r.Close()
-	s := bufio.NewScanner(r)
-	for s.Scan() {
-		line := s.Text()
-		if strings.Contains(line, t.Comment.String()) {
-			return true, nil
-		}
-	}
-	err = s.Err()
-	if err != nil {
-		return false, err
-	}
-	return false, nil
 }
 
 // FindBlame sets the blame information on each todo in a set of todos
