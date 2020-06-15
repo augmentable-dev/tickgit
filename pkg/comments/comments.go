@@ -120,7 +120,7 @@ func SearchCommit(commit *object.Commit, cb func(*Comment)) error {
 		return err
 	}
 	defer fileIter.Close()
-	fileIter.ForEach(func(file *object.File) error {
+	err = fileIter.ForEach(func(file *object.File) error {
 		if file.Mode.IsFile() {
 			wg.Add(1)
 			go func() {
@@ -141,6 +141,10 @@ func SearchCommit(commit *object.Commit, cb func(*Comment)) error {
 		}
 		return nil
 	})
+
+	if err != nil {
+		return err
+	}
 
 	wg.Wait()
 	return nil

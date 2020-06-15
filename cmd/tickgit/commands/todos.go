@@ -99,7 +99,8 @@ var todosCmd = &cobra.Command{
 			handleError(err, s)
 
 		} else {
-			todos.WriteTodos(foundToDos, os.Stdout)
+			err := todos.WriteTodos(foundToDos, os.Stdout)
+			handleError(err, s)
 		}
 
 	},
