@@ -75,14 +75,10 @@ func SearchDir(dirPath string, cb func(comment *Comment)) error {
 			pathComponents := strings.Split(localPath, string(os.PathSeparator))
 			// let's ignore git directories TODO: figure out a more generic way to set ignores
 			matched, err := filepath.Match(".git", pathComponents[0])
-			ignore, err := filepath.Match(".gitignore", pathComponents[0])
 			if err != nil {
 				return err
 			}
 			if matched {
-				return nil
-			}
-			if ignore {
 				return nil
 			}
 			if de.IsRegular() {
