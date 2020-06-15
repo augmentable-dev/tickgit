@@ -58,7 +58,7 @@ func NewToDo(comment comments.Comment, matchPhrases []string) *ToDo {
 func NewToDos(comments comments.Comments) ToDos {
 	todos := make(ToDos, 0)
 	for _, comment := range comments {
-		todo := NewToDo(*comment)
+		todo := NewToDo(*comment, mat)
 		if todo != nil {
 			todos = append(todos, todo)
 		}
