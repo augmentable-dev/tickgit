@@ -60,10 +60,11 @@ brew install tickgit
 #### GoBinaries
 
 ```
-curl -sf https://gobinaries.com/github.com/augmentable-dev/tickgit/cmd/tickgit | sh
+curl -sf https://gobinaries.com/augmentable-dev/tickgit/cmd/tickgit | sh
 ```
 
-Will use [GoBinaries](https://gobinaries.com/) to install the latest version of `tickgit` (or a specified one).
+Will use [GoBinaries](https://gobinaries.com/) to install the latest version of `tickgit`.
+You can specifiy a particular version by appending `@VERSION` to the URL above.
 
 #### go install
 
