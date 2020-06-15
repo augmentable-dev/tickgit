@@ -31,11 +31,11 @@ func (t *ToDo) TimeAgo() string {
 }
 
 // NewToDo produces a pointer to a ToDo from a comment
-func NewToDo(comment comments.Comment) *ToDo {
+func NewToDo(comment comments.Comment, matchPhrases []string) *ToDo {
 	// FIXME this should be configurable and probably NOT hardcoded here
 	// in fact, this list might be too expansive for a sensible default
-	startingMatchPhrases := []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
-	var matchPhrases []string
+	//startingMatchPhrases := []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
+	//var matchPhrases []string
 	for _, phrase := range startingMatchPhrases {
 		// populates matchPhrases with the contents of startingMatchPhrases plus the @+lowerCase version of each phrase
 		matchPhrases = append(matchPhrases, phrase, "@"+strings.ToLower(phrase))
