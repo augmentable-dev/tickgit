@@ -72,7 +72,7 @@ You can specifiy a particular version by appending `@VERSION` to the URL above.
 go install github.com/augmentable-dev/tickgit/cmd/tickgit
 ```
 
-With $GOBIN set and in your $PATH.
+With `$GOBIN` set and in your `$PATH`.
 
 ### Usage
 
