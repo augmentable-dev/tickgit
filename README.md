@@ -42,8 +42,8 @@ Check out [an example](https://www.tickgit.com/browse?repo=github.com/kubernetes
 #### Coming Soon
 
 - [x] Blame - get a better sense of how old TODOs are, when they were introduced and by whom
+- [x] More `TODO` type phrases to match, such as `FIXME`, `XXX`, `HACK`, or customized alternatives.
 - [ ] Context - more visibility into the lines of code _around_ a TODO for greater context
-- [ ] More `TODO` type phrases to match, such as `FIXME`, `XXX`, `HACK`, or customized alternatives.
 - [ ] More configurability (e.g. custom ignore paths)
 - [ ] Markdown parsing
 - [ ] More thorough historical stats
@@ -56,6 +56,22 @@ Check out [an example](https://www.tickgit.com/browse?repo=github.com/kubernetes
 brew tap augmentable-dev/tickgit
 brew install tickgit
 ```
+
+#### GoBinaries
+
+```
+curl -sf https://gobinaries.com/github.com/augmentable-dev/tickgit/cmd/tickgit | sh
+```
+
+Will use [GoBinaries](https://gobinaries.com/) to install the latest version of `tickgit` (or a specified one).
+
+#### go install
+
+```
+go install github.com/augmentable-dev/tickgit/cmd/tickgit
+```
+
+With $GOBIN set and in your $PATH.
 
 ### Usage
 
