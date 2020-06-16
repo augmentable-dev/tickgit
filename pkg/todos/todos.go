@@ -19,8 +19,8 @@ type ToDo struct {
 
 // ToDos represents a list of ToDo items
 type ToDos []*ToDo
-var startingMatchPhrases []string
-startingMatchPhrases = {"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
+
+var startingMatchPhrases []string = []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
 
 // TimeAgo returns a human readable string indicating the time since the todo was added
 func (t *ToDo) TimeAgo() string {
@@ -36,7 +36,7 @@ func NewToDo(comment comments.Comment, matchPhrases []string) *ToDo {
 	// in fact, this list might be too expansive for a sensible default
 	//startingMatchPhrases := []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
 	//var matchPhrases []string
-	for _, phrase := range startingMatchPhrases {
+	for _, phrase := range matchPhrases {
 		// populates matchPhrases with the contents of startingMatchPhrases plus the @+lowerCase version of each phrase
 		matchPhrases = append(matchPhrases, phrase, "@"+strings.ToLower(phrase))
 	}
