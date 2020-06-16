@@ -19,6 +19,8 @@ type ToDo struct {
 
 // ToDos represents a list of ToDo items
 type ToDos []*ToDo
+var startingMatchPhrases []string
+startingMatchPhrases = {"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
 
 // TimeAgo returns a human readable string indicating the time since the todo was added
 func (t *ToDo) TimeAgo() string {
@@ -58,7 +60,7 @@ func NewToDo(comment comments.Comment, matchPhrases []string) *ToDo {
 func NewToDos(comments comments.Comments) ToDos {
 	todos := make(ToDos, 0)
 	for _, comment := range comments {
-		todo := NewToDo(*comment, mat)
+		todo := NewToDo(*comment, startingMatchPhrases)
 		if todo != nil {
 			todos = append(todos, todo)
 		}
