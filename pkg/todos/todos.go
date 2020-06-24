@@ -55,7 +55,7 @@ func NewToDo(comment comments.Comment, matchPhrases []string) *ToDo {
 }
 
 // NewToDos produces a list of ToDos from a list of comments
-func NewToDos(comments comments.Comments, matchPhrases string[]) ToDos {
+func NewToDos(comments comments.Comments, matchPhrases []string) ToDos {
 	todos := make(ToDos, 0)
 	for _, comment := range comments {
 		todo := NewToDo(*comment, matchPhrases)
