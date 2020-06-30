@@ -20,8 +20,6 @@ type ToDo struct {
 // ToDos represents a list of ToDo items
 type ToDos []*ToDo
 
-var startingMatchPhrases []string = []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
-
 // TimeAgo returns a human readable string indicating the time since the todo was added
 func (t *ToDo) TimeAgo() string {
 	if t.Blame == nil {

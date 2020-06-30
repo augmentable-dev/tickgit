@@ -7,6 +7,8 @@ import (
 	"github.com/augmentable-dev/tickgit/pkg/comments"
 )
 
+var startingMatchPhrases []string = []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
+
 func TestNewToDoNil(t *testing.T) {
 	collection := lege.NewCollection(lege.Location{}, lege.Location{}, lege.Boundary{}, "Hello World")
 	comment := comments.Comment{
