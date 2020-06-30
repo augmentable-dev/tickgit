@@ -17,6 +17,7 @@ import (
 )
 
 var csvOutput bool
+var startingMatchPhrases []string = []string{"TODO", "FIXME", "OPTIMIZE", "HACK", "XXX", "WTF", "LEGACY"}
 
 func init() {
 	todosCmd.Flags().BoolVar(&csvOutput, "csv-output", false, "specify whether or not output should be in CSV format")
@@ -47,7 +48,7 @@ var todosCmd = &cobra.Command{
 
 		foundToDos := make(todos.ToDos, 0)
 		err = comments.SearchDir(dir, func(comment *comments.Comment) {
-			todo := todos.NewToDo(*comment)
+			todo := todos.NewToDo(*comment, startingMatchPhrases)
 			if todo != nil {
 				foundToDos = append(foundToDos, todo)
 				s.Suffix = fmt.Sprintf(" %d TODOs found", len(foundToDos))
