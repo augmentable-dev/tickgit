@@ -5,11 +5,13 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/augmentable-dev/lege"
+	"github.com/denormal/go-gitignore"
 	"github.com/go-enry/go-enry/v2"
 	"github.com/karrick/godirwalk"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
@@ -66,14 +68,33 @@ func SearchFile(filePath string, reader io.Reader, cb func(*Comment)) error {
 
 // SearchDir searches a directory for comments
 func SearchDir(dirPath string, cb func(comment *Comment)) error {
+
+	// TODO this should be done "recursively" in each subdirectory of the directory being searched
+	// .gitignores can be in sub-directories of a git repo, therefore we should account for *any* not just the one in the root directory
+	gitignorePath := path.Join(dirPath, ".gitignore")
+	var ignore gitignore.GitIgnore
+	if _, err := os.Stat(gitignorePath); err == nil { // if .gitignore exists
+		ignore, err = gitignore.NewFromFile(gitignorePath)
+
+		if err != nil {
+			return err
+		}
+
+	} else if os.IsNotExist(err) {
+		// if the .gitignore file just doesn't exist, do nothing
+	} else {
+		// if there was still an error, return it
+		return err
+	}
+
 	err := godirwalk.Walk(dirPath, &godirwalk.Options{
-		Callback: func(path string, de *godirwalk.Dirent) error {
-			localPath, err := filepath.Rel(dirPath, path)
+		Callback: func(p string, de *godirwalk.Dirent) error {
+			localPath, err := filepath.Rel(dirPath, p)
 			if err != nil {
 				return err
 			}
 			pathComponents := strings.Split(localPath, string(os.PathSeparator))
-			// let's ignore git directories TODO: figure out a more generic way to set ignores
+
 			matched, err := filepath.Match(".git", pathComponents[0])
 			if err != nil {
 				return err
@@ -82,10 +103,12 @@ func SearchDir(dirPath string, cb func(comment *Comment)) error {
 				return nil
 			}
 			if de.IsRegular() {
-				p, err := filepath.Abs(path)
-				if err != nil {
-					return err
+				if ignore != nil {
+					if ignore.Ignore(p) {
+						return nil
+					}
 				}
+
 				f, err := os.Open(p)
 				if err != nil {
 					return err

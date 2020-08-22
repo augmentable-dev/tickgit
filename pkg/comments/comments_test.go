@@ -1,8 +1,35 @@
 package comments
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
 )
+
+func TestGitIgnore(t *testing.T) {
+	gitignorePath := "testdata/gitignore/.gitignore"
+	err := ioutil.WriteFile(gitignorePath, []byte("test.go\n"), 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		err := os.Remove(gitignorePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}()
+	var comments Comments
+	err = SearchDir("testdata/gitignore", func(comment *Comment) {
+		comments = append(comments, comment)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(comments) != 0 {
+		t.Fail()
+	}
+}
 
 func TestJSFiles(t *testing.T) {
 	var comments Comments
